@@ -71,3 +71,28 @@ button{
 button:hover{
     transform:scale(1.02);
 }
+.hidden{
+    display:none;
+}
+
+#imageContainer{
+    margin-top:30px;
+    text-align:center;
+}
+
+#resultImage{
+    max-width:100%;
+    border-radius:20px;
+    display:none;
+}
+
+#downloadBtn{
+    display:inline-block;
+    margin-top:20px;
+    padding:15px 30px;
+    background:#00e5ff;
+    color:black;
+    text-decoration:none;
+    border-radius:12px;
+    font-weight:bold;
+}
