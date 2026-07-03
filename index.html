@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SIBGHAT AI - Text to Image Generator</title>
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Background -->
+    <div class="background"></div>
+
+    <!-- Main Container -->
+    <div class="container">
+
+        <!-- Logo -->
+        <h1 class="logo">
+            SIBGHAT <span>AI</span>
+        </h1>
+
+        <p class="subtitle">
+            Create stunning AI Images from your imagination.
+        </p>
+
+        <!-- Prompt -->
+        <textarea
+            id="prompt"
+            placeholder="Describe the image you want to generate..."
+        ></textarea>
+
+        <!-- Generate Button -->
+        <button id="generateBtn">
+            ✨ Generate Image
+        </button>
+
+        <!-- Loading -->
+        <div id="loading" class="hidden">
+            Generating your masterpiece...
+        </div>
+
+        <!-- Image Output -->
+        <div id="imageContainer">
+            <img id="resultImage" src="" alt="">
+        </div>
+
+        <!-- Download -->
+        <a id="downloadBtn" class="hidden" download="SIBGHAT-AI.png">
+            Download Image
+        </a>
+
+    </div>
+
+    <!-- JavaScript -->
+    <script src="script.js"></script>
+
+</body>
+</html>
