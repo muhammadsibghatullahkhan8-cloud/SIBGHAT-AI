@@ -1,4 +1,3 @@
-
 const promptInput = document.getElementById("prompt");
 const style = document.getElementById("style");
 const generateBtn = document.getElementById("generateBtn");
@@ -6,6 +5,9 @@ const resultImage = document.getElementById("resultImage");
 const downloadBtn = document.getElementById("downloadBtn");
 const loading = document.getElementById("loading");
 const historyContainer = document.getElementById("history");
+
+/* ---------------- DEEPAI KEY ---------------- */
+const DEEPAI_KEY = "e56a67d0-84d7-435f-a0c9-64b1779df06c";
 
 /* ---------------- INIT ---------------- */
 window.addEventListener("load", () => {
@@ -39,40 +41,32 @@ function buildPrompt(userPrompt){
     ", ultra realistic, 8k, cinematic lighting, highly detailed, sharp focus, masterpiece";
 }
 
-/* ---------------- REAL AI (HUGGING FACE READY) ---------------- */
-async function generateRealAI(prompt){
-
-    const HF_TOKEN = "YOUR_HUGGINGFACE_TOKEN"; // <-- yahan apna token lagana
+/* ---------------- DEEPAI AI ---------------- */
+async function generateWithDeepAI(prompt){
 
     try {
-        const response = await fetch(
-            "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
-            {
-                method: "POST",
-                headers: {
-                    "Authorization": "Bearer " + HF_TOKEN,
-                    "Content-Type": "application/json"
-                },
-                body: JSON.stringify({
-                    inputs: prompt
-                })
-            }
-        );
+        const response = await fetch("https://api.deepai.org/api/text2img", {
+            method: "POST",
+            headers: {
+                "Api-Key": DEEPAI_KEY
+            },
+            body: new URLSearchParams({
+                text: prompt
+            })
+        });
 
-        const blob = await response.blob();
-        return URL.createObjectURL(blob);
+        const data = await response.json();
+
+        if (data.output_url) {
+            return data.output_url;
+        }
+
+        return null;
 
     } catch (err) {
-        console.log("AI Error:", err);
+        console.log("DeepAI Error:", err);
         return null;
     }
-}
-
-/* ---------------- FALLBACK (backup system) ---------------- */
-function fallbackAI(prompt){
-    return "https://image.pollinations.ai/prompt/" +
-        encodeURIComponent(prompt) +
-        "?width=1024&height=1024&model=flux&seed=" + Date.now();
 }
 
 /* ---------------- HISTORY ---------------- */
@@ -105,14 +99,14 @@ generateBtn.addEventListener("click", async () => {
 
     const userPrompt = promptInput.value.trim();
 
-    if(!userPrompt){
+    if (!userPrompt) {
         alert("Please enter a prompt!");
         return;
     }
 
     // UI LOCK
     generateBtn.disabled = true;
-    generateBtn.innerText = "AI Thinking...";
+    generateBtn.innerText = "Generating AI...";
     loading.style.display = "block";
 
     resultImage.style.display = "none";
@@ -120,12 +114,14 @@ generateBtn.addEventListener("click", async () => {
 
     const finalPrompt = buildPrompt(userPrompt);
 
-    /* ---------------- TRY REAL AI ---------------- */
-    let imageURL = await generateRealAI(finalPrompt);
+    /* ---------------- AI CALL ---------------- */
+    let imageURL = await generateWithDeepAI(finalPrompt);
 
-    /* ---------------- IF FAIL → FALLBACK ---------------- */
-    if(!imageURL){
-        imageURL = fallbackAI(finalPrompt);
+    // fallback (agar DeepAI fail ho jaye)
+    if (!imageURL) {
+        imageURL = "https://image.pollinations.ai/prompt/" +
+            encodeURIComponent(finalPrompt) +
+            "?width=1024&height=1024&model=flux&seed=" + Date.now();
     }
 
     // UI RESET
