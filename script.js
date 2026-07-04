@@ -7,6 +7,13 @@ const downloadBtn = document.getElementById("downloadBtn");
 const loading = document.getElementById("loading");
 const historyContainer = document.getElementById("history");
 
+/* ---------------- LOAD HISTORY FROM STORAGE ---------------- */
+window.addEventListener("load", () => {
+    const saved = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
+
+    saved.forEach(url => addToHistoryUI(url));
+});
+
 /* ---------------- SPLASH SCREEN ---------------- */
 window.addEventListener("load", () => {
     setTimeout(() => {
@@ -22,6 +29,12 @@ window.addEventListener("load", () => {
 /* ---------------- PROMPT SUGGESTION ---------------- */
 function setPrompt(text) {
     promptInput.value = text;
+}
+
+/* ---------------- CLEAR HISTORY ---------------- */
+function clearHistory() {
+    localStorage.removeItem("sibghat_history");
+    if (historyContainer) historyContainer.innerHTML = "";
 }
 
 /* ---------------- PROMPT BUILDER ---------------- */
@@ -69,6 +82,31 @@ async function tryGenerate(prompt, retries = 2) {
     return null;
 }
 
+/* ---------------- ADD HISTORY UI + SAVE ---------------- */
+function addToHistoryUI(url){
+    const img = document.createElement("img");
+    img.src = url;
+
+    img.onclick = () => {
+        resultImage.src = url;
+        resultImage.style.display = "block";
+    };
+
+    if(historyContainer){
+        historyContainer.prepend(img);
+    }
+}
+
+/* ---------------- SAVE HISTORY ---------------- */
+function saveHistory(url){
+    let data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
+    data.unshift(url);
+
+    if(data.length > 20) data.pop(); // limit
+
+    localStorage.setItem("sibghat_history", JSON.stringify(data));
+}
+
 /* ---------------- MAIN BUTTON ---------------- */
 generateBtn.addEventListener("click", async () => {
 
@@ -81,7 +119,7 @@ generateBtn.addEventListener("click", async () => {
 
     // LOCK UI
     generateBtn.disabled = true;
-    generateBtn.innerText = "Thinking...";
+    generateBtn.innerText = "Thinking AI...";
 
     loading.style.display = "block";
     resultImage.style.display = "none";
@@ -98,21 +136,15 @@ generateBtn.addEventListener("click", async () => {
     generateBtn.innerText = "✨ Generate Image";
 
     if (imageURL) {
+
         resultImage.src = imageURL;
         resultImage.style.display = "block";
 
         downloadBtn.href = imageURL;
         downloadBtn.style.display = "inline-block";
 
-        /* ---------------- HISTORY ---------------- */
-        if (historyContainer) {
-            const img = document.createElement("img");
-            img.src = imageURL;
-            img.onclick = () => {
-                resultImage.src = imageURL;
-            };
-            historyContainer.prepend(img);
-        }
+        addToHistoryUI(imageURL);
+        saveHistory(imageURL);
 
     } else {
         alert("AI failed to generate image. Try again.");
