@@ -8,6 +8,12 @@ const historyContainer = document.getElementById("history");
 
 const DEEPAI_KEY = "e56a67d0-84d7-435f-a0c9-64b1779df06c";
 
+/* ---------------- MONEY SYSTEM ---------------- */
+let user = {
+    plan: "free",
+    credits: 5
+};
+
 /* ---------------- INIT ---------------- */
 window.addEventListener("load", () => {
     const splash = document.getElementById("splash-screen");
@@ -20,7 +26,30 @@ window.addEventListener("load", () => {
     }, 2000);
 
     loadHistory();
+    updateUI();
 });
+
+/* ---------------- UI UPDATE ---------------- */
+function updateUI(){
+    console.log("💰 Credits:", user.credits, "Plan:", user.plan);
+}
+
+/* ---------------- CREDIT SYSTEM ---------------- */
+function useCredit(){
+
+    if(user.plan === "pro"){
+        return true; // unlimited
+    }
+
+    if(user.credits <= 0){
+        alert("❌ No credits left! Upgrade to Pro to continue.");
+        return false;
+    }
+
+    user.credits--;
+    updateUI();
+    return true;
+}
 
 /* ---------------- CLEAN PROMPT ---------------- */
 function cleanPrompt(text){
@@ -49,9 +78,8 @@ function getQualityBoost(){
     return "masterpiece, best quality, ultra detailed, sharp focus, 4k resolution, professional composition";
 }
 
-/* ---------------- PROMPT ENGINE (STARTUP CORE) ---------------- */
+/* ---------------- PROMPT ENGINE ---------------- */
 function buildPrompt(text){
-
     const clean = cleanPrompt(text);
     const styleBoost = getStyleBoost();
     const quality = getQualityBoost();
@@ -80,7 +108,7 @@ async function generateWithDeepAI(prompt, retry = 2){
         return null;
 
     } catch (err) {
-        console.log("AI Error:", err);
+        console.log(err);
         if (retry > 0) return await generateWithDeepAI(prompt, retry - 1);
         return null;
     }
@@ -134,13 +162,18 @@ function setLoading(state){
     }
 }
 
-/* ---------------- MAIN GENERATE ---------------- */
+/* ---------------- MAIN SYSTEM (MONEY CHECK) ---------------- */
 generateBtn.addEventListener("click", async () => {
 
     const userText = promptInput.value.trim();
 
     if(!userText){
         alert("⚠ Please enter a prompt!");
+        return;
+    }
+
+    // 💰 CREDIT CHECK FIRST
+    if(!useCredit()){
         return;
     }
 
