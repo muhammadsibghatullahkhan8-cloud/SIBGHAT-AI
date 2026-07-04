@@ -34,11 +34,29 @@ function clearHistory(){
     historyContainer.innerHTML = "";
 }
 
-/* ---------------- PROMPT ENGINE ---------------- */
+/* ---------------- PROMPT ENGINE (UPDATED PRO VERSION) ---------------- */
 function buildPrompt(userPrompt){
-    return userPrompt +
-    (style.value ? ", " + style.value : "") +
-    ", ultra realistic, 8k, cinematic lighting, highly detailed, sharp focus, masterpiece";
+
+    let styleBoost = "";
+
+    if(style.value === "Realistic"){
+        styleBoost = "ultra realistic DSLR photo, natural lighting, 8k detail";
+    }
+    else if(style.value === "Anime"){
+        styleBoost = "anime style, studio ghibli quality, highly detailed illustration";
+    }
+    else if(style.value === "Cinematic"){
+        styleBoost = "cinematic lighting, movie scene, dramatic composition, 8k";
+    }
+    else{
+        styleBoost = "high quality, ultra detailed";
+    }
+
+    return `
+${userPrompt},
+${styleBoost},
+sharp focus, professional composition, masterpiece, best quality
+`.trim();
 }
 
 /* ---------------- DEEPAI AI ---------------- */
