@@ -22,47 +22,50 @@ window.addEventListener("load", () => {
     loadHistory();
 });
 
-/* ---------------- STYLE BOOST (PRO LEVEL) ---------------- */
+/* ---------------- SMART PROMPT CLEANER ---------------- */
+function cleanPrompt(text){
+    return text
+        .replace(/\s+/g, " ")
+        .replace(/a photo of|image of|picture of/gi, "")
+        .trim();
+}
+
+/* ---------------- STYLE ENGINE (ULTRA PRO) ---------------- */
 function getStyleBoost(){
-    switch(style.value){
-        case "Realistic":
-            return "ultra realistic DSLR photo, cinematic lighting, 8k, sharp focus, professional photography";
-        case "Anime":
-            return "anime style, studio ghibli quality, ultra detailed illustration, cinematic anime lighting";
-        case "Cinematic":
-            return "cinematic movie scene, dramatic lighting, film still, ultra realistic 8k";
-        default:
-            return "high quality, ultra detailed, professional render";
-    }
+    const value = style.value;
+
+    const styles = {
+        Realistic: "ultra realistic DSLR photography, 8k, natural lighting, sharp focus, professional color grading",
+        Anime: "anime style, studio ghibli quality, cinematic anime lighting, ultra detailed illustration",
+        Cinematic: "movie scene, cinematic lighting, dramatic composition, film still, ultra realistic 8k"
+    };
+
+    return styles[value] || "high quality, ultra detailed professional render";
 }
 
-/* ---------------- NEGATIVE PROMPT (IMPORTANT PRO FEATURE) ---------------- */
-function getNegativePrompt(){
-    return "blurry, low quality, distorted, watermark, text, extra limbs, bad anatomy, noisy";
+/* ---------------- QUALITY BOOST ---------------- */
+function getQualityBoost(){
+    return "masterpiece, best quality, ultra detailed, sharp focus, 4k, high resolution";
 }
 
-/* ---------------- PROMPT ENGINE (SMART AI BOOST) ---------------- */
+/* ---------------- PROMPT ENGINE ---------------- */
 function buildPrompt(text){
-
-    const cleanText = text.trim();
+    const clean = cleanPrompt(text);
     const styleBoost = getStyleBoost();
-    const negative = getNegativePrompt();
+    const quality = getQualityBoost();
 
-    return `
-${cleanText},
-${styleBoost},
-masterpiece, best quality, ultra detailed, sharp focus, 4k, professional composition
-`.replace(/\s+/g, " ").trim() +
-` --no ${negative}`;
+    return `${clean}, ${styleBoost}, ${quality}`;
 }
 
-/* ---------------- AI CALL (WITH RETRY SYSTEM) ---------------- */
-async function generateWithDeepAI(prompt, retry = 1){
+/* ---------------- AI CALL (ULTRA SAFE + RETRY) ---------------- */
+async function generateWithDeepAI(prompt, retry = 2){
 
     try {
         const res = await fetch("https://api.deepai.org/api/text2img", {
             method: "POST",
-            headers: { "Api-Key": DEEPAI_KEY },
+            headers: {
+                "Api-Key": DEEPAI_KEY
+            },
             body: new URLSearchParams({ text: prompt })
         });
 
@@ -71,7 +74,6 @@ async function generateWithDeepAI(prompt, retry = 1){
         if (data.output_url) return data.output_url;
 
         if (retry > 0) {
-            console.log("Retrying AI...");
             return await generateWithDeepAI(prompt, retry - 1);
         }
 
@@ -79,23 +81,22 @@ async function generateWithDeepAI(prompt, retry = 1){
 
     } catch (err) {
         console.log("AI Error:", err);
+
+        if (retry > 0) {
+            return await generateWithDeepAI(prompt, retry - 1);
+        }
+
         return null;
     }
 }
 
-/* ---------------- WATERMARK (PRO FEATURE IDEA) ---------------- */
-function addWatermark(url){
-    // simple trick: append timestamp to force unique + avoid cache issues
-    return url + "&wm=sibghat_ai";
-}
-
-/* ---------------- HISTORY ---------------- */
+/* ---------------- HISTORY SYSTEM ---------------- */
 function saveHistory(url){
     let data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
 
     data.unshift(url);
 
-    if(data.length > 30) data = data.slice(0,30);
+    if(data.length > 40) data = data.slice(0,40);
 
     localStorage.setItem("sibghat_history", JSON.stringify(data));
 }
@@ -117,19 +118,19 @@ function loadHistory(){
     data.forEach(addToHistory);
 }
 
-/* ---------------- MAIN GENERATE (PRO FLOW) ---------------- */
+/* ---------------- MAIN ENGINE ---------------- */
 generateBtn.addEventListener("click", async () => {
 
     const userText = promptInput.value.trim();
 
     if(!userText){
-        alert("⚠ Enter a prompt first!");
+        alert("⚠ Please enter a prompt!");
         return;
     }
 
     // UI LOCK
     generateBtn.disabled = true;
-    generateBtn.innerText = "AI Thinking...";
+    generateBtn.innerText = "Generating Ultra AI...";
     loading.style.display = "block";
 
     resultImage.style.display = "none";
@@ -141,16 +142,13 @@ generateBtn.addEventListener("click", async () => {
 
     // fallback system
     if(!imageURL){
-        imageURL = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?seed=${Date.now()}`;
+        imageURL = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?t=${Date.now()}`;
     }
-
-    // watermark apply (logic level)
-    imageURL = addWatermark(imageURL);
 
     // UI RESET
     loading.style.display = "none";
     generateBtn.disabled = false;
-    generateBtn.innerText = "✨ Generate Image";
+    generateBtn.innerText = "✨ Generate Ultra Image";
 
     resultImage.src = imageURL;
     resultImage.style.display = "block";
