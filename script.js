@@ -7,104 +7,96 @@ const downloadBtn = document.getElementById("downloadBtn");
 const loading = document.getElementById("loading");
 const historyContainer = document.getElementById("history");
 
-/* ---------------- LOAD HISTORY FROM STORAGE ---------------- */
+/* ---------------- INIT ---------------- */
 window.addEventListener("load", () => {
-    const saved = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
 
-    saved.forEach(url => addToHistoryUI(url));
-});
-
-/* ---------------- SPLASH SCREEN ---------------- */
-window.addEventListener("load", () => {
+    // splash screen
+    const splash = document.getElementById("splash-screen");
     setTimeout(() => {
-        const splash = document.getElementById("splash-screen");
         if (splash) {
             splash.style.opacity = "0";
-            splash.style.transition = "0.6s";
             setTimeout(() => splash.remove(), 600);
         }
     }, 2000);
+
+    // load history
+    loadHistory();
 });
 
-/* ---------------- PROMPT SUGGESTION ---------------- */
-function setPrompt(text) {
+/* ---------------- PROMPT ---------------- */
+function setPrompt(text){
     promptInput.value = text;
 }
 
 /* ---------------- CLEAR HISTORY ---------------- */
-function clearHistory() {
+function clearHistory(){
     localStorage.removeItem("sibghat_history");
-    if (historyContainer) historyContainer.innerHTML = "";
+    if(historyContainer) historyContainer.innerHTML = "";
 }
 
-/* ---------------- PROMPT BUILDER ---------------- */
-function buildPrompt(userPrompt) {
-    let finalPrompt = userPrompt;
-
-    if (style.value !== "") {
-        finalPrompt += ", " + style.value;
-    }
-
-    finalPrompt += ", ultra realistic, 8k, highly detailed, sharp focus, cinematic lighting, professional photography, masterpiece";
-
-    return finalPrompt;
+/* ---------------- PROMPT ENGINE ---------------- */
+function buildPrompt(userPrompt){
+    return userPrompt +
+    (style.value ? ", " + style.value : "") +
+    ", ultra realistic, 8k, highly detailed, cinematic lighting, sharp focus, masterpiece, professional photography";
 }
 
-/* ---------------- IMAGE URL ---------------- */
-function generateImageURL(prompt) {
+/* ---------------- IMAGE API ---------------- */
+function generateImageURL(prompt){
     return "https://image.pollinations.ai/prompt/" +
         encodeURIComponent(prompt) +
         "?width=1024&height=1024&model=flux&seed=" + Date.now();
 }
 
 /* ---------------- SAFE GENERATION ---------------- */
-async function tryGenerate(prompt, retries = 2) {
+async function tryGenerate(prompt){
 
-    for (let i = 0; i <= retries; i++) {
+    const url = generateImageURL(prompt);
+    const img = new Image();
 
-        const url = generateImageURL(prompt);
+    const success = await new Promise((resolve) => {
 
-        const img = new Image();
+        img.onload = () => resolve(true);
+        img.onerror = () => resolve(false);
 
-        const success = await new Promise((resolve) => {
+        img.src = url;
 
-            img.onload = () => resolve(true);
-            img.onerror = () => resolve(false);
+        setTimeout(() => resolve(false), 8000);
+    });
 
-            img.src = url;
-
-            setTimeout(() => resolve(false), 8000);
-        });
-
-        if (success) return url;
-    }
-
-    return null;
+    return success ? url : null;
 }
 
-/* ---------------- ADD HISTORY UI + SAVE ---------------- */
-function addToHistoryUI(url){
+/* ---------------- HISTORY SAVE ---------------- */
+function saveHistory(url){
+    let data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
+
+    data.unshift(url);
+
+    if(data.length > 20) data.pop();
+
+    localStorage.setItem("sibghat_history", JSON.stringify(data));
+}
+
+/* ---------------- HISTORY UI ---------------- */
+function addToHistory(url){
+
     const img = document.createElement("img");
     img.src = url;
 
     img.onclick = () => {
         resultImage.src = url;
-        resultImage.style.display = "block";
+        resultImage.classList.add("show");
     };
 
-    if(historyContainer){
-        historyContainer.prepend(img);
-    }
+    historyContainer.prepend(img);
 }
 
-/* ---------------- SAVE HISTORY ---------------- */
-function saveHistory(url){
-    let data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
-    data.unshift(url);
+/* ---------------- LOAD HISTORY ---------------- */
+function loadHistory(){
+    const data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
 
-    if(data.length > 20) data.pop(); // limit
-
-    localStorage.setItem("sibghat_history", JSON.stringify(data));
+    data.forEach(url => addToHistory(url));
 }
 
 /* ---------------- MAIN BUTTON ---------------- */
@@ -112,16 +104,16 @@ generateBtn.addEventListener("click", async () => {
 
     const userPrompt = promptInput.value.trim();
 
-    if (!userPrompt) {
-        alert("Please enter a prompt.");
+    if(!userPrompt){
+        alert("Please enter a prompt!");
         return;
     }
 
-    // LOCK UI
+    // UI LOCK
     generateBtn.disabled = true;
-    generateBtn.innerText = "Thinking AI...";
-
+    generateBtn.innerText = "Generating...";
     loading.style.display = "block";
+
     resultImage.style.display = "none";
     downloadBtn.style.display = "none";
 
@@ -129,24 +121,27 @@ generateBtn.addEventListener("click", async () => {
 
     const imageURL = await tryGenerate(finalPrompt);
 
-    loading.style.display = "none";
-
-    // RESET UI
+    // UI RESET
     generateBtn.disabled = false;
     generateBtn.innerText = "✨ Generate Image";
+    loading.style.display = "none";
 
-    if (imageURL) {
+    if(imageURL){
 
         resultImage.src = imageURL;
         resultImage.style.display = "block";
 
+        setTimeout(() => {
+            resultImage.classList.add("show");
+        }, 50);
+
         downloadBtn.href = imageURL;
         downloadBtn.style.display = "inline-block";
 
-        addToHistoryUI(imageURL);
         saveHistory(imageURL);
+        addToHistory(imageURL);
 
     } else {
-        alert("AI failed to generate image. Try again.");
+        alert("Image generation failed. Try again.");
     }
 });
