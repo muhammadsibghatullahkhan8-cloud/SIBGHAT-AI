@@ -30,28 +30,9 @@ window.addEventListener("load", () => {
     updateUI();
 });
 
-/* ---------------- THEME SYSTEM ---------------- */
+/* ---------------- THEME ---------------- */
 theme.addEventListener("change", () => {
-
-    if(theme.value === "dark"){
-        document.body.style.background = "#0f172a";
-        document.body.style.color = "white";
-    }
-
-    if(theme.value === "light"){
-        document.body.style.background = "#f5f5f5";
-        document.body.style.color = "#111";
-    }
-
-    if(theme.value === "purple"){
-        document.body.style.background = "#2e1065";
-        document.body.style.color = "white";
-    }
-
-    if(theme.value === "green"){
-        document.body.style.background = "#052e16";
-        document.body.style.color = "white";
-    }
+    document.body.className = theme.value;
 });
 
 /* ---------------- UI ---------------- */
@@ -79,7 +60,7 @@ function getStyleBoost(){
         case "Realistic":
             return "ultra realistic DSLR photography, cinematic lighting, 8k";
         case "Anime":
-            return "anime style, cinematic lighting, ultra detailed illustration";
+            return "anime style, ultra detailed illustration";
         case "Cinematic":
             return "cinematic movie scene, dramatic lighting";
         default:
@@ -91,21 +72,21 @@ function getStyleBoost(){
 function getCategoryBoost(){
     switch(category.value){
         case "car":
-            return "luxury sports car, hyper realistic automotive photography";
+            return "luxury sports car, automotive photography";
         case "space":
-            return "outer space, galaxies, planets, sci-fi cinematic scene";
+            return "outer space, galaxies, sci-fi scene";
         case "natural":
-            return "beautiful nature, mountains, forest, river, ultra realistic";
+            return "beautiful nature, mountains, forest, river";
         case "city":
-            return "futuristic city, skyscrapers, neon lights, cyberpunk";
+            return "futuristic city, neon lights, cyberpunk";
         case "anime":
-            return "anime style, vibrant colors, detailed illustration";
+            return "anime style illustration";
         default:
             return "";
     }
 }
 
-/* ---------------- 🌍 MULTILINGUAL TRANSLATOR ---------------- */
+/* ---------------- 🌍 MULTI LANGUAGE TRANSLATOR ---------------- */
 async function translateToEnglish(text) {
     try {
         const res = await fetch(
@@ -114,23 +95,28 @@ async function translateToEnglish(text) {
         );
 
         const data = await res.json();
-        return data[0][0][0];
+        let translated = data[0][0][0];
+
+        // FORCE CLEAN PROMPT STRUCTURE
+        return "detailed professional image of: " + translated;
+
     } catch (e) {
-        return text; // fallback if translation fails
+        return "detailed professional image of: " + text;
     }
 }
 
 /* ---------------- PROMPT BUILDER ---------------- */
 function buildPrompt(text){
-    return `${text}, ${getStyleBoost()}, ${getCategoryBoost()}, ultra detailed, 4k, best quality`;
+    return `professional photo, ${text}, ${getStyleBoost()}, ${getCategoryBoost()}, ultra detailed, realistic lighting, 8k, sharp focus, no watermark, no text`;
 }
 
 /* ---------------- IMAGE GENERATION ---------------- */
 async function generateImage(prompt){
     try {
         const res = await fetch(
-            "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt)
+            "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt.trim())
         );
+
         return res.url;
     } catch (err) {
         console.log(err);
@@ -151,7 +137,6 @@ function addToHistory(url){
     img.src = url;
     img.onclick = () => {
         resultImage.src = url;
-        resultImage.style.display = "block";
     };
     historyContainer.prepend(img);
 }
@@ -185,13 +170,13 @@ generateBtn.addEventListener("click", async () => {
     resultImage.style.display = "none";
     downloadBtn.style.display = "none";
 
-    /* 🌍 STEP 1: MULTILINGUAL SUPPORT */
+    // 🌍 STEP 1: TRANSLATE ANY LANGUAGE → ENGLISH
     const englishText = await translateToEnglish(text);
 
-    /* 🎨 STEP 2: BUILD FINAL PROMPT */
+    // 🎨 STEP 2: BUILD FINAL PROMPT
     const finalPrompt = buildPrompt(englishText);
 
-    /* 🖼 STEP 3: GENERATE IMAGE */
+    // 🖼 STEP 3: GENERATE IMAGE
     const imageURL = await generateImage(finalPrompt);
 
     setLoading(false);
