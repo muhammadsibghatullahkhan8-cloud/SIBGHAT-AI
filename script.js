@@ -22,30 +22,31 @@ window.addEventListener("load", () => {
     loadHistory();
 });
 
-/* ---------------- SMART PROMPT CLEANER ---------------- */
+/* ---------------- CLEAN PROMPT ---------------- */
 function cleanPrompt(text){
     return text
         .replace(/\s+/g, " ")
-        .replace(/a photo of|image of|picture of/gi, "")
+        .replace(/a photo of|image of|picture of|generate/gi, "")
         .trim();
 }
 
-/* ---------------- STYLE ENGINE (ULTRA PRO) ---------------- */
+/* ---------------- STYLE ENGINE ---------------- */
 function getStyleBoost(){
-    const value = style.value;
-
-    const styles = {
-        Realistic: "ultra realistic DSLR photography, 8k, natural lighting, sharp focus, professional color grading",
-        Anime: "anime style, studio ghibli quality, cinematic anime lighting, ultra detailed illustration",
-        Cinematic: "movie scene, cinematic lighting, dramatic composition, film still, ultra realistic 8k"
-    };
-
-    return styles[value] || "high quality, ultra detailed professional render";
+    switch(style.value){
+        case "Realistic":
+            return "ultra realistic DSLR photography, 8k, natural lighting, cinematic color grading, sharp focus";
+        case "Anime":
+            return "anime style, studio ghibli quality, cinematic anime lighting, ultra detailed illustration";
+        case "Cinematic":
+            return "movie scene, cinematic lighting, dramatic composition, film still, ultra realistic 8k";
+        default:
+            return "high quality, ultra detailed professional render";
+    }
 }
 
-/* ---------------- QUALITY BOOST ---------------- */
+/* ---------------- QUALITY ENGINE ---------------- */
 function getQualityBoost(){
-    return "masterpiece, best quality, ultra detailed, sharp focus, 4k, high resolution";
+    return "masterpiece, best quality, ultra detailed, sharp focus, 4k, professional composition";
 }
 
 /* ---------------- PROMPT ENGINE ---------------- */
@@ -57,7 +58,7 @@ function buildPrompt(text){
     return `${clean}, ${styleBoost}, ${quality}`;
 }
 
-/* ---------------- AI CALL (ULTRA SAFE + RETRY) ---------------- */
+/* ---------------- AI ENGINE (PRO + RETRY) ---------------- */
 async function generateWithDeepAI(prompt, retry = 2){
 
     try {
@@ -73,40 +74,39 @@ async function generateWithDeepAI(prompt, retry = 2){
 
         if (data.output_url) return data.output_url;
 
-        if (retry > 0) {
-            return await generateWithDeepAI(prompt, retry - 1);
-        }
+        if (retry > 0) return await generateWithDeepAI(prompt, retry - 1);
 
         return null;
 
     } catch (err) {
-        console.log("AI Error:", err);
-
-        if (retry > 0) {
-            return await generateWithDeepAI(prompt, retry - 1);
-        }
-
+        console.log(err);
+        if (retry > 0) return await generateWithDeepAI(prompt, retry - 1);
         return null;
     }
 }
 
-/* ---------------- HISTORY SYSTEM ---------------- */
+/* ---------------- HISTORY SYSTEM (FULL PRODUCT STYLE) ---------------- */
 function saveHistory(url){
     let data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
 
-    data.unshift(url);
+    data.unshift({
+        url,
+        time: Date.now()
+    });
 
-    if(data.length > 40) data = data.slice(0,40);
+    if(data.length > 50) data = data.slice(0,50);
 
     localStorage.setItem("sibghat_history", JSON.stringify(data));
 }
 
-function addToHistory(url){
+function addToHistory(item){
     const img = document.createElement("img");
-    img.src = url;
+    img.src = item.url || item;
+
+    img.title = "Click to preview";
 
     img.onclick = () => {
-        resultImage.src = url;
+        resultImage.src = img.src;
         resultImage.style.display = "block";
     };
 
@@ -115,10 +115,27 @@ function addToHistory(url){
 
 function loadHistory(){
     const data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
-    data.forEach(addToHistory);
+
+    data.forEach(item => {
+        if(typeof item === "string") addToHistory(item);
+        else addToHistory(item.url);
+    });
 }
 
-/* ---------------- MAIN ENGINE ---------------- */
+/* ---------------- LOADING UI CONTROL ---------------- */
+function setLoading(state){
+    if(state){
+        loading.style.display = "block";
+        generateBtn.disabled = true;
+        generateBtn.innerText = "AI Processing...";
+    } else {
+        loading.style.display = "none";
+        generateBtn.disabled = false;
+        generateBtn.innerText = "✨ Generate Image";
+    }
+}
+
+/* ---------------- MAIN GENERATOR ---------------- */
 generateBtn.addEventListener("click", async () => {
 
     const userText = promptInput.value.trim();
@@ -128,10 +145,7 @@ generateBtn.addEventListener("click", async () => {
         return;
     }
 
-    // UI LOCK
-    generateBtn.disabled = true;
-    generateBtn.innerText = "Generating Ultra AI...";
-    loading.style.display = "block";
+    setLoading(true);
 
     resultImage.style.display = "none";
     downloadBtn.style.display = "none";
@@ -140,15 +154,11 @@ generateBtn.addEventListener("click", async () => {
 
     let imageURL = await generateWithDeepAI(finalPrompt);
 
-    // fallback system
     if(!imageURL){
         imageURL = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?t=${Date.now()}`;
     }
 
-    // UI RESET
-    loading.style.display = "none";
-    generateBtn.disabled = false;
-    generateBtn.innerText = "✨ Generate Ultra Image";
+    setLoading(false);
 
     resultImage.src = imageURL;
     resultImage.style.display = "block";
