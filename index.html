@@ -28,8 +28,38 @@ body {
     opacity: 0.3;
 }
 
-/* container */
+/* layout */
+#app {
+    display: flex;
+}
+
+/* sidebar */
+#sidebar {
+    width: 260px;
+    background: #020617;
+    height: 100vh;
+    padding: 20px;
+    border-right: 1px solid #1e293b;
+    overflow-y: auto;
+}
+
+#sidebar h2 {
+    color: #00e5ff;
+}
+
+#sidebar button {
+    width: 100%;
+    padding: 10px;
+    margin-top: 10px;
+    border: none;
+    border-radius: 10px;
+    background: #00e5ff;
+    cursor: pointer;
+}
+
+/* main */
 .container {
+    flex: 1;
     text-align: center;
     padding: 50px 20px;
     position: relative;
@@ -58,12 +88,6 @@ h1 span {
     color: #00e5ff;
 }
 
-/* subtitle */
-.subtitle {
-    opacity: 0.7;
-    margin-bottom: 20px;
-}
-
 /* inputs */
 textarea, select {
     width: 80%;
@@ -85,7 +109,6 @@ button {
     font-weight: bold;
     cursor: pointer;
     transition: 0.3s;
-    margin-top: 15px;
 }
 
 button:hover {
@@ -93,18 +116,7 @@ button:hover {
     box-shadow: 0 0 25px #00e5ff;
 }
 
-/* loading */
-#loading {
-    display: none;
-    margin-top: 15px;
-    color: #00e5ff;
-}
-
 /* suggestions */
-#suggestions {
-    margin-top: 10px;
-}
-
 #suggestions button {
     margin: 5px;
     padding: 8px 12px;
@@ -117,23 +129,10 @@ button:hover {
 }
 
 /* image */
-#imageContainer {
-    margin-top: 20px;
-}
-
 #resultImage {
     max-width: 80%;
     border-radius: 12px;
     box-shadow: 0 0 25px rgba(0,229,255,0.3);
-}
-
-/* download */
-#downloadBtn {
-    display: none;
-    margin-top: 15px;
-    color: #00e5ff;
-    text-decoration: none;
-    font-weight: bold;
 }
 
 /* history */
@@ -156,57 +155,51 @@ button:hover {
 
 <div class="background-glow"></div>
 
-<div class="container">
+<div id="app">
 
-    <!-- LOGO -->
-    <img src="logo.png" class="logo-img">
-
-    <!-- TITLE -->
-    <h1>SIBGHAT <span>AI</span></h1>
-
-    <p class="subtitle">Turn your imagination into AI images</p>
-
-    <!-- INPUT -->
-    <textarea id="prompt" placeholder="Describe your image..."></textarea><br>
-
-    <!-- SUGGESTIONS -->
-    <div id="suggestions">
-        <button onclick="setPrompt('A futuristic city at night')">City</button>
-        <button onclick="setPrompt('A lion in jungle cinematic')">Lion</button>
-        <button onclick="setPrompt('A cyberpunk robot warrior')">Robot</button>
+    <!-- SIDEBAR -->
+    <div id="sidebar">
+        <h2>⚡ SIBGHAT AI</h2>
+        <button onclick="clearHistory()">Clear History</button>
+        <div id="history"></div>
     </div>
 
-    <select id="style">
-        <option>Default</option>
-        <option>Realistic</option>
-        <option>Anime</option>
-        <option>Cinematic</option>
-    </select><br>
+    <!-- MAIN -->
+    <div class="container">
 
-    <select id="size">
-        <option>Square</option>
-        <option>Portrait</option>
-        <option>Landscape</option>
-    </select><br>
+        <img src="logo.png" class="logo-img">
 
-    <!-- BUTTON -->
-    <button id="generateBtn" onclick="generateImage()">
-        ✨ Generate Image
-    </button>
+        <h1>SIBGHAT <span>AI</span></h1>
 
-    <!-- LOADING -->
-    <div id="loading">Generating your image...</div>
+        <p class="subtitle">Turn your imagination into AI images</p>
 
-    <!-- IMAGE OUTPUT -->
-    <div id="imageContainer">
-        <img id="resultImage">
+        <textarea id="prompt" placeholder="Describe your image..."></textarea>
+
+        <!-- suggestions -->
+        <div id="suggestions">
+            <button onclick="setPrompt('A futuristic city at night')">City</button>
+            <button onclick="setPrompt('A lion cinematic jungle')">Lion</button>
+            <button onclick="setPrompt('Cyberpunk robot warrior')">Robot</button>
+        </div>
+
+        <select id="style">
+            <option>Default</option>
+            <option>Realistic</option>
+            <option>Anime</option>
+            <option>Cinematic</option>
+        </select>
+
+        <button id="generateBtn">✨ Generate Image</button>
+
+        <div id="loading">Thinking AI...</div>
+
+        <div id="imageContainer">
+            <img id="resultImage">
+        </div>
+
+        <a id="downloadBtn">Download</a>
+
     </div>
-
-    <!-- DOWNLOAD -->
-    <a id="downloadBtn">Download Image</a>
-
-    <!-- HISTORY -->
-    <div id="history"></div>
 
 </div>
 
