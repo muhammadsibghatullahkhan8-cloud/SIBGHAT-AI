@@ -16,7 +16,7 @@ body {
     overflow-x: hidden;
 }
 
-/* glow background */
+/* glow */
 .background-glow {
     position: absolute;
     width: 400px;
@@ -61,7 +61,7 @@ h1 span {
 /* subtitle */
 .subtitle {
     opacity: 0.7;
-    margin-bottom: 30px;
+    margin-bottom: 20px;
 }
 
 /* inputs */
@@ -69,7 +69,7 @@ textarea, select {
     width: 80%;
     max-width: 500px;
     padding: 12px;
-    margin: 10px 0;
+    margin: 8px 0;
     border-radius: 10px;
     border: none;
     outline: none;
@@ -90,10 +90,17 @@ button {
 
 button:hover {
     transform: scale(1.05);
-    box-shadow: 0 0 20px #00e5ff;
+    box-shadow: 0 0 25px #00e5ff;
 }
 
-/* image box */
+/* loading */
+#loading {
+    display: none;
+    margin-top: 15px;
+    color: #00e5ff;
+}
+
+/* image */
 #imageContainer {
     margin-top: 20px;
 }
@@ -101,15 +108,16 @@ button:hover {
 #resultImage {
     max-width: 80%;
     border-radius: 12px;
-    box-shadow: 0 0 20px rgba(0,229,255,0.3);
+    box-shadow: 0 0 25px rgba(0,229,255,0.3);
 }
 
 /* download */
 #downloadBtn {
-    display: inline-block;
+    display: none;
     margin-top: 15px;
     color: #00e5ff;
     text-decoration: none;
+    font-weight: bold;
 }
 </style>
 </head>
@@ -144,13 +152,21 @@ button:hover {
         <option>Landscape</option>
     </select><br>
 
-    <button id="generateBtn">✨ Generate</button>
+    <!-- BUTTON (AI READY HOOK) -->
+    <button id="generateBtn" onclick="generateImage()">
+        ✨ Generate Image
+    </button>
 
+    <!-- LOADING -->
+    <div id="loading">Generating your image...</div>
+
+    <!-- IMAGE OUTPUT -->
     <div id="imageContainer">
         <img id="resultImage">
     </div>
 
-    <a id="downloadBtn">Download</a>
+    <!-- DOWNLOAD -->
+    <a id="downloadBtn">Download Image</a>
 
 </div>
 
