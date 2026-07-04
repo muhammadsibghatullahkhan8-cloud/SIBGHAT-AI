@@ -1,109 +1,160 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SIBGHAT AI - Text to Image Generator</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SIBGHAT AI</title>
 
-    <!-- Google Font -->
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
 
-    <!-- CSS -->
-    <link rel="stylesheet" href="style.css">
+<style>
+body {
+    margin: 0;
+    font-family: 'Poppins', sans-serif;
+    background: radial-gradient(circle at top, #0f172a, #020617);
+    color: white;
+    overflow-x: hidden;
+}
 
-    <style>
-        /* Extra professional logo styling */
-        .logo-img {
-            width: 90px;
-            height: auto;
-            display: block;
-            margin: 0 auto 10px auto;
-            border-radius: 12px;
-        }
+/* glow background */
+.background-glow {
+    position: absolute;
+    width: 400px;
+    height: 400px;
+    background: #00e5ff;
+    filter: blur(150px);
+    top: -100px;
+    left: -100px;
+    opacity: 0.3;
+}
 
-        .logo {
-            text-align: center;
-            font-size: 40px;
-            font-weight: 700;
-        }
+/* container */
+.container {
+    text-align: center;
+    padding: 50px 20px;
+    position: relative;
+}
 
-        .logo span {
-            color: #00e5ff;
-        }
-    </style>
+/* logo */
+.logo-img {
+    width: 90px;
+    border-radius: 12px;
+    margin-bottom: 10px;
+    animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+    0%,100% { transform: translateY(0); }
+    50% { transform: translateY(-10px); }
+}
+
+/* title */
+h1 {
+    font-size: 42px;
+    margin: 10px 0;
+}
+
+h1 span {
+    color: #00e5ff;
+}
+
+/* subtitle */
+.subtitle {
+    opacity: 0.7;
+    margin-bottom: 30px;
+}
+
+/* inputs */
+textarea, select {
+    width: 80%;
+    max-width: 500px;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+}
+
+/* button */
+button {
+    background: linear-gradient(90deg, #00e5ff, #3b82f6);
+    border: none;
+    padding: 12px 25px;
+    border-radius: 10px;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+    margin-top: 15px;
+}
+
+button:hover {
+    transform: scale(1.05);
+    box-shadow: 0 0 20px #00e5ff;
+}
+
+/* image box */
+#imageContainer {
+    margin-top: 20px;
+}
+
+#resultImage {
+    max-width: 80%;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0,229,255,0.3);
+}
+
+/* download */
+#downloadBtn {
+    display: inline-block;
+    margin-top: 15px;
+    color: #00e5ff;
+    text-decoration: none;
+}
+</style>
 </head>
 
 <body>
 
-    <!-- Background -->
-    <div class="background"></div>
+<div class="background-glow"></div>
 
-    <!-- Main Container -->
-    <div class="container">
+<div class="container">
 
-        <!-- LOGO IMAGE -->
-        <img src="logo.png" alt="SIBGHAT AI Logo" class="logo-img">
+    <!-- LOGO -->
+    <img src="logo.png" class="logo-img">
 
-        <!-- Title -->
-        <h1 class="logo">
-            SIBGHAT <span>AI</span>
-        </h1>
+    <!-- TITLE -->
+    <h1>SIBGHAT <span>AI</span></h1>
 
-        <p class="subtitle">
-            Create stunning AI Images from your imagination.
-        </p>
+    <p class="subtitle">Turn your imagination into AI images</p>
 
-        <!-- Prompt -->
-        <textarea
-            id="prompt"
-            placeholder="Describe the image you want to generate..."
-        ></textarea>
+    <!-- INPUT -->
+    <textarea id="prompt" placeholder="Describe your image..."></textarea><br>
 
-        <!-- Style Selector -->
-        <label for="style">Choose Style</label>
+    <select id="style">
+        <option>Default</option>
+        <option>Realistic</option>
+        <option>Anime</option>
+        <option>Cinematic</option>
+    </select><br>
 
-        <select id="style">
-            <option value="">Default</option>
-            <option value="realistic">Realistic</option>
-            <option value="anime">Anime</option>
-            <option value="cinematic">Cinematic</option>
-            <option value="3d render">3D Render</option>
-            <option value="fantasy">Fantasy</option>
-        </select>
+    <select id="size">
+        <option>Square</option>
+        <option>Portrait</option>
+        <option>Landscape</option>
+    </select><br>
 
-        <!-- Image Size Selector -->
-        <label for="size">Image Size</label>
+    <button id="generateBtn">✨ Generate</button>
 
-        <select id="size">
-            <option value="square">Square (1:1)</option>
-            <option value="portrait">Portrait (2:3)</option>
-            <option value="landscape">Landscape (16:9)</option>
-        </select>
-
-        <!-- Generate Button -->
-        <button id="generateBtn">
-            ✨ Generate Image
-        </button>
-
-        <!-- Loading -->
-        <div id="loading" class="hidden">
-            Generating your masterpiece...
-        </div>
-
-        <!-- Image Output -->
-        <div id="imageContainer">
-            <img id="resultImage" src="" alt="">
-        </div>
-
-        <!-- Download -->
-        <a id="downloadBtn" class="hidden" download="SIBGHAT-AI.png">
-            Download Image
-        </a>
-
+    <div id="imageContainer">
+        <img id="resultImage">
     </div>
 
-    <!-- JavaScript -->
-    <script src="script.js"></script>
+    <a id="downloadBtn">Download</a>
+
+</div>
+
+<script src="script.js"></script>
 
 </body>
 </html>
