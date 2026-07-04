@@ -26,7 +26,7 @@ window.addEventListener("load", () => {
 function cleanPrompt(text){
     return text
         .replace(/\s+/g, " ")
-        .replace(/a photo of|image of|picture of|generate/gi, "")
+        .replace(/make|create|generate|draw/gi, "")
         .trim();
 }
 
@@ -34,9 +34,9 @@ function cleanPrompt(text){
 function getStyleBoost(){
     switch(style.value){
         case "Realistic":
-            return "ultra realistic DSLR photography, 8k, natural lighting, cinematic color grading, sharp focus";
+            return "ultra realistic DSLR photography, cinematic lighting, 8k, sharp focus, professional color grading";
         case "Anime":
-            return "anime style, studio ghibli quality, cinematic anime lighting, ultra detailed illustration";
+            return "anime style, studio ghibli quality, ultra detailed illustration, cinematic anime lighting";
         case "Cinematic":
             return "movie scene, cinematic lighting, dramatic composition, film still, ultra realistic 8k";
         default:
@@ -44,13 +44,14 @@ function getStyleBoost(){
     }
 }
 
-/* ---------------- QUALITY ENGINE ---------------- */
+/* ---------------- QUALITY BOOST ---------------- */
 function getQualityBoost(){
-    return "masterpiece, best quality, ultra detailed, sharp focus, 4k, professional composition";
+    return "masterpiece, best quality, ultra detailed, sharp focus, 4k resolution, professional composition";
 }
 
-/* ---------------- PROMPT ENGINE ---------------- */
+/* ---------------- PROMPT ENGINE (STARTUP CORE) ---------------- */
 function buildPrompt(text){
+
     const clean = cleanPrompt(text);
     const styleBoost = getStyleBoost();
     const quality = getQualityBoost();
@@ -58,7 +59,7 @@ function buildPrompt(text){
     return `${clean}, ${styleBoost}, ${quality}`;
 }
 
-/* ---------------- AI ENGINE (PRO + RETRY) ---------------- */
+/* ---------------- AI ENGINE ---------------- */
 async function generateWithDeepAI(prompt, retry = 2){
 
     try {
@@ -79,13 +80,13 @@ async function generateWithDeepAI(prompt, retry = 2){
         return null;
 
     } catch (err) {
-        console.log(err);
+        console.log("AI Error:", err);
         if (retry > 0) return await generateWithDeepAI(prompt, retry - 1);
         return null;
     }
 }
 
-/* ---------------- HISTORY SYSTEM (FULL PRODUCT STYLE) ---------------- */
+/* ---------------- HISTORY SYSTEM ---------------- */
 function saveHistory(url){
     let data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
 
@@ -102,8 +103,6 @@ function saveHistory(url){
 function addToHistory(item){
     const img = document.createElement("img");
     img.src = item.url || item;
-
-    img.title = "Click to preview";
 
     img.onclick = () => {
         resultImage.src = img.src;
@@ -122,7 +121,7 @@ function loadHistory(){
     });
 }
 
-/* ---------------- LOADING UI CONTROL ---------------- */
+/* ---------------- LOADING UI ---------------- */
 function setLoading(state){
     if(state){
         loading.style.display = "block";
@@ -135,7 +134,7 @@ function setLoading(state){
     }
 }
 
-/* ---------------- MAIN GENERATOR ---------------- */
+/* ---------------- MAIN GENERATE ---------------- */
 generateBtn.addEventListener("click", async () => {
 
     const userText = promptInput.value.trim();
