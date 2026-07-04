@@ -100,6 +100,22 @@ button:hover {
     color: #00e5ff;
 }
 
+/* suggestions */
+#suggestions {
+    margin-top: 10px;
+}
+
+#suggestions button {
+    margin: 5px;
+    padding: 8px 12px;
+    border-radius: 10px;
+    border: none;
+    cursor: pointer;
+    background: #00e5ff;
+    color: black;
+    font-weight: bold;
+}
+
 /* image */
 #imageContainer {
     margin-top: 20px;
@@ -118,6 +134,20 @@ button:hover {
     color: #00e5ff;
     text-decoration: none;
     font-weight: bold;
+}
+
+/* history */
+#history {
+    margin-top: 25px;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+    gap: 10px;
+}
+
+#history img {
+    width: 100%;
+    border-radius: 10px;
+    cursor: pointer;
 }
 </style>
 </head>
@@ -139,6 +169,13 @@ button:hover {
     <!-- INPUT -->
     <textarea id="prompt" placeholder="Describe your image..."></textarea><br>
 
+    <!-- SUGGESTIONS -->
+    <div id="suggestions">
+        <button onclick="setPrompt('A futuristic city at night')">City</button>
+        <button onclick="setPrompt('A lion in jungle cinematic')">Lion</button>
+        <button onclick="setPrompt('A cyberpunk robot warrior')">Robot</button>
+    </div>
+
     <select id="style">
         <option>Default</option>
         <option>Realistic</option>
@@ -152,7 +189,7 @@ button:hover {
         <option>Landscape</option>
     </select><br>
 
-    <!-- BUTTON (AI READY HOOK) -->
+    <!-- BUTTON -->
     <button id="generateBtn" onclick="generateImage()">
         ✨ Generate Image
     </button>
@@ -167,6 +204,9 @@ button:hover {
 
     <!-- DOWNLOAD -->
     <a id="downloadBtn">Download Image</a>
+
+    <!-- HISTORY -->
+    <div id="history"></div>
 
 </div>
 
