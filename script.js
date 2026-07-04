@@ -8,10 +8,11 @@ const historyContainer = document.getElementById("history");
 
 const DEEPAI_KEY = "e56a67d0-84d7-435f-a0c9-64b1779df06c";
 
-/* ---------------- MONEY SYSTEM ---------------- */
+/* ---------------- FREE STARTUP USER SYSTEM ---------------- */
 let user = {
     plan: "free",
-    credits: 5
+    credits: 5,
+    maxCredits: 5
 };
 
 /* ---------------- INIT ---------------- */
@@ -29,20 +30,20 @@ window.addEventListener("load", () => {
     updateUI();
 });
 
-/* ---------------- UI UPDATE ---------------- */
+/* ---------------- UI ---------------- */
 function updateUI(){
-    console.log("💰 Credits:", user.credits, "Plan:", user.plan);
+    console.log("💰 Plan:", user.plan, "Credits:", user.credits);
 }
 
-/* ---------------- CREDIT SYSTEM ---------------- */
-function useCredit(){
+/* ---------------- FREE CREDIT SYSTEM ---------------- */
+function canGenerate(){
 
     if(user.plan === "pro"){
-        return true; // unlimited
+        return true; // future paid users unlimited
     }
 
     if(user.credits <= 0){
-        alert("❌ No credits left! Upgrade to Pro to continue.");
+        alert("❌ Daily limit finished! Try again tomorrow or upgrade later.");
         return false;
     }
 
@@ -55,7 +56,7 @@ function useCredit(){
 function cleanPrompt(text){
     return text
         .replace(/\s+/g, " ")
-        .replace(/make|create|generate|draw/gi, "")
+        .replace(/make|create|generate|draw|image of/gi, "")
         .trim();
 }
 
@@ -63,9 +64,9 @@ function cleanPrompt(text){
 function getStyleBoost(){
     switch(style.value){
         case "Realistic":
-            return "ultra realistic DSLR photography, cinematic lighting, 8k, sharp focus, professional color grading";
+            return "ultra realistic DSLR photography, cinematic lighting, 8k ultra detailed, sharp focus";
         case "Anime":
-            return "anime style, studio ghibli quality, ultra detailed illustration, cinematic anime lighting";
+            return "anime style, studio ghibli inspired, cinematic lighting, ultra detailed illustration";
         case "Cinematic":
             return "movie scene, cinematic lighting, dramatic composition, film still, ultra realistic 8k";
         default:
@@ -80,6 +81,7 @@ function getQualityBoost(){
 
 /* ---------------- PROMPT ENGINE ---------------- */
 function buildPrompt(text){
+
     const clean = cleanPrompt(text);
     const styleBoost = getStyleBoost();
     const quality = getQualityBoost();
@@ -108,7 +110,7 @@ async function generateWithDeepAI(prompt, retry = 2){
         return null;
 
     } catch (err) {
-        console.log(err);
+        console.log("AI Error:", err);
         if (retry > 0) return await generateWithDeepAI(prompt, retry - 1);
         return null;
     }
@@ -149,12 +151,12 @@ function loadHistory(){
     });
 }
 
-/* ---------------- LOADING UI ---------------- */
+/* ---------------- LOADING CONTROL ---------------- */
 function setLoading(state){
     if(state){
         loading.style.display = "block";
         generateBtn.disabled = true;
-        generateBtn.innerText = "AI Processing...";
+        generateBtn.innerText = "Generating AI...";
     } else {
         loading.style.display = "none";
         generateBtn.disabled = false;
@@ -162,7 +164,7 @@ function setLoading(state){
     }
 }
 
-/* ---------------- MAIN SYSTEM (MONEY CHECK) ---------------- */
+/* ---------------- MAIN GENERATION ---------------- */
 generateBtn.addEventListener("click", async () => {
 
     const userText = promptInput.value.trim();
@@ -172,8 +174,8 @@ generateBtn.addEventListener("click", async () => {
         return;
     }
 
-    // 💰 CREDIT CHECK FIRST
-    if(!useCredit()){
+    // 💰 FREE LIMIT CHECK
+    if(!canGenerate()){
         return;
     }
 
@@ -186,6 +188,7 @@ generateBtn.addEventListener("click", async () => {
 
     let imageURL = await generateWithDeepAI(finalPrompt);
 
+    // fallback system
     if(!imageURL){
         imageURL = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?t=${Date.now()}`;
     }
