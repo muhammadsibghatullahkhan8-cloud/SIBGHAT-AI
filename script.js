@@ -22,41 +22,42 @@ window.addEventListener("load", () => {
     loadHistory();
 });
 
-/* ---------------- CLEAR HISTORY ---------------- */
-function clearHistory(){
-    localStorage.removeItem("sibghat_history");
-    historyContainer.innerHTML = "";
-}
-
-/* ---------------- STYLE ENGINE (PRO) ---------------- */
+/* ---------------- STYLE BOOST (PRO LEVEL) ---------------- */
 function getStyleBoost(){
     switch(style.value){
         case "Realistic":
-            return "ultra realistic DSLR photo, natural lighting, 8k, ultra sharp details";
+            return "ultra realistic DSLR photo, cinematic lighting, 8k, sharp focus, professional photography";
         case "Anime":
-            return "anime illustration, studio ghibli inspired, highly detailed, cinematic anime lighting";
+            return "anime style, studio ghibli quality, ultra detailed illustration, cinematic anime lighting";
         case "Cinematic":
-            return "cinematic movie scene, dramatic lighting, film still, ultra detailed 8k";
+            return "cinematic movie scene, dramatic lighting, film still, ultra realistic 8k";
         default:
-            return "high quality, ultra detailed, professional photography";
+            return "high quality, ultra detailed, professional render";
     }
 }
 
-/* ---------------- PROMPT ENGINE ---------------- */
-function buildPrompt(text){
-
-    const base = text.trim();
-    const styleBoost = getStyleBoost();
-
-    return `
-${base},
-${styleBoost},
-professional composition, masterpiece, best quality, ultra detailed, sharp focus
-`.replace(/\s+/g, " ").trim();
+/* ---------------- NEGATIVE PROMPT (IMPORTANT PRO FEATURE) ---------------- */
+function getNegativePrompt(){
+    return "blurry, low quality, distorted, watermark, text, extra limbs, bad anatomy, noisy";
 }
 
-/* ---------------- AI CALL ---------------- */
-async function generateWithDeepAI(prompt){
+/* ---------------- PROMPT ENGINE (SMART AI BOOST) ---------------- */
+function buildPrompt(text){
+
+    const cleanText = text.trim();
+    const styleBoost = getStyleBoost();
+    const negative = getNegativePrompt();
+
+    return `
+${cleanText},
+${styleBoost},
+masterpiece, best quality, ultra detailed, sharp focus, 4k, professional composition
+`.replace(/\s+/g, " ").trim() +
+` --no ${negative}`;
+}
+
+/* ---------------- AI CALL (WITH RETRY SYSTEM) ---------------- */
+async function generateWithDeepAI(prompt, retry = 1){
 
     try {
         const res = await fetch("https://api.deepai.org/api/text2img", {
@@ -69,6 +70,11 @@ async function generateWithDeepAI(prompt){
 
         if (data.output_url) return data.output_url;
 
+        if (retry > 0) {
+            console.log("Retrying AI...");
+            return await generateWithDeepAI(prompt, retry - 1);
+        }
+
         return null;
 
     } catch (err) {
@@ -77,13 +83,19 @@ async function generateWithDeepAI(prompt){
     }
 }
 
+/* ---------------- WATERMARK (PRO FEATURE IDEA) ---------------- */
+function addWatermark(url){
+    // simple trick: append timestamp to force unique + avoid cache issues
+    return url + "&wm=sibghat_ai";
+}
+
 /* ---------------- HISTORY ---------------- */
 function saveHistory(url){
     let data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
 
     data.unshift(url);
 
-    if(data.length > 25) data = data.slice(0,25);
+    if(data.length > 30) data = data.slice(0,30);
 
     localStorage.setItem("sibghat_history", JSON.stringify(data));
 }
@@ -105,19 +117,19 @@ function loadHistory(){
     data.forEach(addToHistory);
 }
 
-/* ---------------- MAIN GENERATE ---------------- */
+/* ---------------- MAIN GENERATE (PRO FLOW) ---------------- */
 generateBtn.addEventListener("click", async () => {
 
     const userText = promptInput.value.trim();
 
     if(!userText){
-        alert("⚠ Please enter a prompt first!");
+        alert("⚠ Enter a prompt first!");
         return;
     }
 
     // UI LOCK
     generateBtn.disabled = true;
-    generateBtn.innerText = "Generating...";
+    generateBtn.innerText = "AI Thinking...";
     loading.style.display = "block";
 
     resultImage.style.display = "none";
@@ -127,9 +139,13 @@ generateBtn.addEventListener("click", async () => {
 
     let imageURL = await generateWithDeepAI(finalPrompt);
 
+    // fallback system
     if(!imageURL){
-        imageURL = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?t=${Date.now()}`;
+        imageURL = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?seed=${Date.now()}`;
     }
+
+    // watermark apply (logic level)
+    imageURL = addWatermark(imageURL);
 
     // UI RESET
     loading.style.display = "none";
