@@ -1,4 +1,5 @@
 const prompt = document.getElementById("prompt");
+const style = document.getElementById("style");
 const generateBtn = document.getElementById("generateBtn");
 const resultImage = document.getElementById("resultImage");
 const downloadBtn = document.getElementById("downloadBtn");
@@ -6,9 +7,9 @@ const loading = document.getElementById("loading");
 
 generateBtn.addEventListener("click", () => {
 
-    const text = prompt.value.trim();
+    const userPrompt = prompt.value.trim();
 
-    if (text === "") {
+    if (userPrompt === "") {
         alert("Please enter a prompt.");
         return;
     }
@@ -17,7 +18,17 @@ generateBtn.addEventListener("click", () => {
     resultImage.style.display = "none";
     downloadBtn.classList.add("hidden");
 
-    const imageURL = "https://image.pollinations.ai/prompt/" + encodeURIComponent(text);
+    // Prompt + Style
+    let finalPrompt = userPrompt;
+
+    if (style.value !== "") {
+        finalPrompt += ", " + style.value;
+    }
+
+    const imageURL =
+        "https://image.pollinations.ai/prompt/" +
+        encodeURIComponent(finalPrompt) +
+        "?t=" + Date.now();
 
     resultImage.onload = () => {
         loading.classList.add("hidden");
@@ -28,9 +39,9 @@ generateBtn.addEventListener("click", () => {
 
     resultImage.onerror = () => {
         loading.classList.add("hidden");
-        alert("Image generation failed. Please try again.");
+        alert("Failed to generate image. Please try again.");
     };
 
-    resultImage.src = imageURL + "?t=" + Date.now();
+    resultImage.src = imageURL;
 
 });
