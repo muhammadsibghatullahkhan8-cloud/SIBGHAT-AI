@@ -5,6 +5,19 @@ const resultImage = document.getElementById("resultImage");
 const downloadBtn = document.getElementById("downloadBtn");
 const loading = document.getElementById("loading");
 
+/* ---------------- SPLASH SCREEN ---------------- */
+window.addEventListener("load", () => {
+    setTimeout(() => {
+        const splash = document.getElementById("splash-screen");
+        if (splash) {
+            splash.style.opacity = "0";
+            splash.style.transition = "0.6s";
+            setTimeout(() => splash.remove(), 600);
+        }
+    }, 2000);
+});
+
+/* ---------------- PROMPT BUILDER ---------------- */
 function buildPrompt(userPrompt) {
     let finalPrompt = userPrompt;
 
@@ -12,18 +25,19 @@ function buildPrompt(userPrompt) {
         finalPrompt += ", " + style.value;
     }
 
-    // 🚀 STRONG QUALITY BOOST (VERY IMPORTANT)
     finalPrompt += ", ultra realistic, 8k, highly detailed, sharp focus, cinematic lighting, professional photography, masterpiece";
 
     return finalPrompt;
 }
 
+/* ---------------- IMAGE URL ---------------- */
 function generateImageURL(prompt) {
     return "https://image.pollinations.ai/prompt/" +
         encodeURIComponent(prompt) +
         "?width=1024&height=1024&model=flux&seed=" + Date.now();
 }
 
+/* ---------------- SAFE GENERATION ---------------- */
 async function tryGenerate(prompt, retries = 2) {
 
     for (let i = 0; i <= retries; i++) {
@@ -39,7 +53,6 @@ async function tryGenerate(prompt, retries = 2) {
 
             img.src = url;
 
-            // timeout safety
             setTimeout(() => resolve(false), 8000);
         });
 
@@ -49,6 +62,7 @@ async function tryGenerate(prompt, retries = 2) {
     return null;
 }
 
+/* ---------------- MAIN BUTTON ---------------- */
 generateBtn.addEventListener("click", async () => {
 
     const userPrompt = promptInput.value.trim();
@@ -57,6 +71,10 @@ generateBtn.addEventListener("click", async () => {
         alert("Please enter a prompt.");
         return;
     }
+
+    // UI LOCK
+    generateBtn.disabled = true;
+    generateBtn.innerText = "Generating...";
 
     loading.style.display = "block";
     resultImage.style.display = "none";
@@ -67,6 +85,10 @@ generateBtn.addEventListener("click", async () => {
     const imageURL = await tryGenerate(finalPrompt);
 
     loading.style.display = "none";
+
+    // UI RESET
+    generateBtn.disabled = false;
+    generateBtn.innerText = "✨ Generate Image";
 
     if (imageURL) {
         resultImage.src = imageURL;
