@@ -6,10 +6,10 @@ const downloadBtn = document.getElementById("downloadBtn");
 const loading = document.getElementById("loading");
 const historyContainer = document.getElementById("history");
 
-/* ⚠️ PUT YOUR NEW REPLICATE TOKEN HERE */
-const REPLICATE_API_TOKEN = "PASTE_YOUR_TOKEN_HERE";
+/* ================= TOKEN ================= */
+const REPLICATE_API_TOKEN = "r8_HSuzO0NoiLZPGdu4G6XG29dwcC2SXRE0gllHE";
 
-/* ---------------- FREE STARTUP USER SYSTEM ---------------- */
+/* ---------------- USER SYSTEM ---------------- */
 let user = {
     plan: "free",
     credits: 5,
@@ -57,23 +57,22 @@ function canGenerate(){
 function getStyleBoost(){
     switch(style.value){
         case "Realistic":
-            return "ultra realistic DSLR photography, cinematic lighting, 8k ultra detailed, sharp focus";
+            return "ultra realistic DSLR photography, cinematic lighting, 8k, sharp focus";
         case "Anime":
-            return "anime style, studio ghibli inspired, cinematic lighting, ultra detailed illustration";
+            return "anime style, cinematic lighting, ultra detailed illustration";
         case "Cinematic":
-            return "movie scene, cinematic lighting, dramatic composition, film still, ultra realistic 8k";
+            return "movie scene, cinematic lighting, dramatic composition, film still";
         default:
             return "high quality, ultra detailed professional render";
     }
 }
 
-/* ---------------- PROMPT ENGINE ---------------- */
+/* ---------------- PROMPT ---------------- */
 function buildPrompt(text){
-    const styleBoost = getStyleBoost();
-    return `${text}, ${styleBoost}, ultra detailed, best quality, 4k, sharp focus`;
+    return `${text}, ${getStyleBoost()}, ultra detailed, best quality, 4k`;
 }
 
-/* ---------------- FLUX (REPLICATE) ENGINE ---------------- */
+/* ---------------- FLUX AI ---------------- */
 async function generateWithFLUX(prompt){
 
     const res = await fetch("https://api.replicate.com/v1/predictions", {
@@ -84,9 +83,7 @@ async function generateWithFLUX(prompt){
         },
         body: JSON.stringify({
             version: "black-forest-labs/flux-schnell",
-            input: {
-                prompt: prompt
-            }
+            input: { prompt }
         })
     });
 
@@ -104,8 +101,7 @@ async function generateWithFLUX(prompt){
         const data = await poll.json();
 
         if(data.status === "succeeded"){
-            output = data.output[0];
-            break;
+            output = Array.isArray(data.output) ? data.output[0] : data.output;
         }
 
         if(data.status === "failed"){
@@ -118,26 +114,23 @@ async function generateWithFLUX(prompt){
     return output;
 }
 
-/* ---------------- HISTORY SYSTEM ---------------- */
+/* ---------------- HISTORY ---------------- */
 function saveHistory(url){
     let data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
 
-    data.unshift({
-        url,
-        time: Date.now()
-    });
+    data.unshift({ url, time: Date.now() });
 
-    if(data.length > 50) data = data.slice(0,50);
+    if(data.length > 50) data = data.slice(0, 50);
 
     localStorage.setItem("sibghat_history", JSON.stringify(data));
 }
 
-function addToHistory(item){
+function addToHistory(url){
     const img = document.createElement("img");
-    img.src = item.url || item;
+    img.src = url;
 
     img.onclick = () => {
-        resultImage.src = img.src;
+        resultImage.src = url;
         resultImage.style.display = "block";
     };
 
@@ -148,8 +141,7 @@ function loadHistory(){
     const data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
 
     data.forEach(item => {
-        if(typeof item === "string") addToHistory(item);
-        else addToHistory(item.url);
+        addToHistory(item.url);
     });
 }
 
@@ -163,10 +155,10 @@ function setLoading(state){
 /* ---------------- MAIN ---------------- */
 generateBtn.addEventListener("click", async () => {
 
-    const userText = promptInput.value.trim();
+    const text = promptInput.value.trim();
 
-    if(!userText){
-        alert("⚠ Please enter a prompt!");
+    if(!text){
+        alert("Please enter a prompt!");
         return;
     }
 
@@ -179,14 +171,14 @@ generateBtn.addEventListener("click", async () => {
     resultImage.style.display = "none";
     downloadBtn.style.display = "none";
 
-    const finalPrompt = buildPrompt(userText);
+    const finalPrompt = buildPrompt(text);
 
     let imageURL = await generateWithFLUX(finalPrompt);
 
     setLoading(false);
 
     if(!imageURL){
-        alert("Image generation failed. Try again.");
+        alert("Image generation failed!");
         return;
     }
 
