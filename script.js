@@ -10,8 +10,8 @@ const historyContainer = document.getElementById("history");
 /* ---------------- INIT ---------------- */
 window.addEventListener("load", () => {
 
-    // splash screen
     const splash = document.getElementById("splash-screen");
+
     setTimeout(() => {
         if (splash) {
             splash.style.opacity = "0";
@@ -19,7 +19,6 @@ window.addEventListener("load", () => {
         }
     }, 2000);
 
-    // load history
     loadHistory();
 });
 
@@ -28,59 +27,63 @@ function setPrompt(text){
     promptInput.value = text;
 }
 
-/* ---------------- CLEAR HISTORY ---------------- */
 function clearHistory(){
     localStorage.removeItem("sibghat_history");
-    if(historyContainer) historyContainer.innerHTML = "";
+    historyContainer.innerHTML = "";
 }
 
 /* ---------------- PROMPT ENGINE ---------------- */
 function buildPrompt(userPrompt){
     return userPrompt +
     (style.value ? ", " + style.value : "") +
-    ", ultra realistic, 8k, highly detailed, cinematic lighting, sharp focus, masterpiece, professional photography";
+    ", ultra realistic, 8k, cinematic lighting, highly detailed, sharp focus, masterpiece";
 }
 
-/* ---------------- IMAGE API ---------------- */
-function generateImageURL(prompt){
+/* ---------------- REAL AI (HUGGING FACE READY) ---------------- */
+async function generateRealAI(prompt){
+
+    const HF_TOKEN = "YOUR_HUGGINGFACE_TOKEN"; // <-- yahan apna token lagana
+
+    try {
+        const response = await fetch(
+            "https://api-inference.huggingface.co/models/runwayml/stable-diffusion-v1-5",
+            {
+                method: "POST",
+                headers: {
+                    "Authorization": "Bearer " + HF_TOKEN,
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    inputs: prompt
+                })
+            }
+        );
+
+        const blob = await response.blob();
+        return URL.createObjectURL(blob);
+
+    } catch (err) {
+        console.log("AI Error:", err);
+        return null;
+    }
+}
+
+/* ---------------- FALLBACK (backup system) ---------------- */
+function fallbackAI(prompt){
     return "https://image.pollinations.ai/prompt/" +
         encodeURIComponent(prompt) +
         "?width=1024&height=1024&model=flux&seed=" + Date.now();
 }
 
-/* ---------------- SAFE GENERATION ---------------- */
-async function tryGenerate(prompt){
-
-    const url = generateImageURL(prompt);
-    const img = new Image();
-
-    const success = await new Promise((resolve) => {
-
-        img.onload = () => resolve(true);
-        img.onerror = () => resolve(false);
-
-        img.src = url;
-
-        setTimeout(() => resolve(false), 8000);
-    });
-
-    return success ? url : null;
-}
-
-/* ---------------- HISTORY SAVE ---------------- */
+/* ---------------- HISTORY ---------------- */
 function saveHistory(url){
     let data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
-
     data.unshift(url);
-
     if(data.length > 20) data.pop();
-
     localStorage.setItem("sibghat_history", JSON.stringify(data));
 }
 
-/* ---------------- HISTORY UI ---------------- */
 function addToHistory(url){
-
     const img = document.createElement("img");
     img.src = url;
 
@@ -92,10 +95,8 @@ function addToHistory(url){
     historyContainer.prepend(img);
 }
 
-/* ---------------- LOAD HISTORY ---------------- */
 function loadHistory(){
     const data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
-
     data.forEach(url => addToHistory(url));
 }
 
@@ -111,7 +112,7 @@ generateBtn.addEventListener("click", async () => {
 
     // UI LOCK
     generateBtn.disabled = true;
-    generateBtn.innerText = "Generating...";
+    generateBtn.innerText = "AI Thinking...";
     loading.style.display = "block";
 
     resultImage.style.display = "none";
@@ -119,29 +120,29 @@ generateBtn.addEventListener("click", async () => {
 
     const finalPrompt = buildPrompt(userPrompt);
 
-    const imageURL = await tryGenerate(finalPrompt);
+    /* ---------------- TRY REAL AI ---------------- */
+    let imageURL = await generateRealAI(finalPrompt);
+
+    /* ---------------- IF FAIL → FALLBACK ---------------- */
+    if(!imageURL){
+        imageURL = fallbackAI(finalPrompt);
+    }
 
     // UI RESET
     generateBtn.disabled = false;
     generateBtn.innerText = "✨ Generate Image";
     loading.style.display = "none";
 
-    if(imageURL){
+    resultImage.src = imageURL;
+    resultImage.style.display = "block";
 
-        resultImage.src = imageURL;
-        resultImage.style.display = "block";
+    setTimeout(() => {
+        resultImage.classList.add("show");
+    }, 50);
 
-        setTimeout(() => {
-            resultImage.classList.add("show");
-        }, 50);
+    downloadBtn.href = imageURL;
+    downloadBtn.style.display = "inline-block";
 
-        downloadBtn.href = imageURL;
-        downloadBtn.style.display = "inline-block";
-
-        saveHistory(imageURL);
-        addToHistory(imageURL);
-
-    } else {
-        alert("Image generation failed. Try again.");
-    }
+    saveHistory(imageURL);
+    addToHistory(imageURL);
 });
