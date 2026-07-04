@@ -1,9 +1,11 @@
+
 const promptInput = document.getElementById("prompt");
 const style = document.getElementById("style");
 const generateBtn = document.getElementById("generateBtn");
 const resultImage = document.getElementById("resultImage");
 const downloadBtn = document.getElementById("downloadBtn");
 const loading = document.getElementById("loading");
+const historyContainer = document.getElementById("history");
 
 /* ---------------- SPLASH SCREEN ---------------- */
 window.addEventListener("load", () => {
@@ -16,6 +18,11 @@ window.addEventListener("load", () => {
         }
     }, 2000);
 });
+
+/* ---------------- PROMPT SUGGESTION ---------------- */
+function setPrompt(text) {
+    promptInput.value = text;
+}
 
 /* ---------------- PROMPT BUILDER ---------------- */
 function buildPrompt(userPrompt) {
@@ -72,9 +79,9 @@ generateBtn.addEventListener("click", async () => {
         return;
     }
 
-    // UI LOCK
+    // LOCK UI
     generateBtn.disabled = true;
-    generateBtn.innerText = "Generating...";
+    generateBtn.innerText = "Thinking...";
 
     loading.style.display = "block";
     resultImage.style.display = "none";
@@ -86,7 +93,7 @@ generateBtn.addEventListener("click", async () => {
 
     loading.style.display = "none";
 
-    // UI RESET
+    // RESET UI
     generateBtn.disabled = false;
     generateBtn.innerText = "✨ Generate Image";
 
@@ -96,6 +103,17 @@ generateBtn.addEventListener("click", async () => {
 
         downloadBtn.href = imageURL;
         downloadBtn.style.display = "inline-block";
+
+        /* ---------------- HISTORY ---------------- */
+        if (historyContainer) {
+            const img = document.createElement("img");
+            img.src = imageURL;
+            img.onclick = () => {
+                resultImage.src = imageURL;
+            };
+            historyContainer.prepend(img);
+        }
+
     } else {
         alert("AI failed to generate image. Try again.");
     }
