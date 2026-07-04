@@ -34,9 +34,6 @@ window.addEventListener("load", () => {
 theme.addEventListener("change", () => {
 
     if(theme.value === "dark"){
-        document.documentElement.style.setProperty("--bg", "#0f172a");
-        document.documentElement.style.setProperty("--text", "#ffffff");
-        document.documentElement.style.setProperty("--accent", "#00e5ff");
         document.body.style.background = "#0f172a";
         document.body.style.color = "white";
     }
@@ -90,7 +87,7 @@ function getStyleBoost(){
     }
 }
 
-/* ---------------- CATEGORY SYSTEM ---------------- */
+/* ---------------- CATEGORY ---------------- */
 function getCategoryBoost(){
     switch(category.value){
         case "car":
@@ -108,16 +105,32 @@ function getCategoryBoost(){
     }
 }
 
-/* ---------------- PROMPT ---------------- */
+/* ---------------- 🌍 MULTILINGUAL TRANSLATOR ---------------- */
+async function translateToEnglish(text) {
+    try {
+        const res = await fetch(
+            "https://translate.googleapis.com/translate_a/single?client=gtx&sl=auto&tl=en&dt=t&q=" +
+            encodeURIComponent(text)
+        );
+
+        const data = await res.json();
+        return data[0][0][0];
+    } catch (e) {
+        return text; // fallback if translation fails
+    }
+}
+
+/* ---------------- PROMPT BUILDER ---------------- */
 function buildPrompt(text){
     return `${text}, ${getStyleBoost()}, ${getCategoryBoost()}, ultra detailed, 4k, best quality`;
 }
 
-/* ================= SAFE AI CALL ================= */
+/* ---------------- IMAGE GENERATION ---------------- */
 async function generateImage(prompt){
-
     try {
-        const res = await fetch("https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt));
+        const res = await fetch(
+            "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt)
+        );
         return res.url;
     } catch (err) {
         console.log(err);
@@ -158,7 +171,7 @@ function setLoading(state){
 /* ---------------- MAIN ---------------- */
 generateBtn.addEventListener("click", async () => {
 
-    const text = promptInput.value.trim();
+    let text = promptInput.value.trim();
 
     if(!text){
         alert("Please enter a prompt!");
@@ -172,8 +185,13 @@ generateBtn.addEventListener("click", async () => {
     resultImage.style.display = "none";
     downloadBtn.style.display = "none";
 
-    const finalPrompt = buildPrompt(text);
+    /* 🌍 STEP 1: MULTILINGUAL SUPPORT */
+    const englishText = await translateToEnglish(text);
 
+    /* 🎨 STEP 2: BUILD FINAL PROMPT */
+    const finalPrompt = buildPrompt(englishText);
+
+    /* 🖼 STEP 3: GENERATE IMAGE */
     const imageURL = await generateImage(finalPrompt);
 
     setLoading(false);
