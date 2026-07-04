@@ -6,10 +6,7 @@ const downloadBtn = document.getElementById("downloadBtn");
 const loading = document.getElementById("loading");
 const historyContainer = document.getElementById("history");
 
-/* ================= TOKEN ================= */
-const REPLICATE_API_TOKEN = "r8_HSuzO0NoiLZPGdu4G6XG29dwcC2SXRE0gllHE";
-
-/* ---------------- USER SYSTEM ---------------- */
+/* ================= USER SYSTEM ================= */
 let user = {
     plan: "free",
     credits: 5,
@@ -38,13 +35,10 @@ function updateUI(){
 
 /* ---------------- CREDIT SYSTEM ---------------- */
 function canGenerate(){
-
-    if(user.plan === "pro"){
-        return true;
-    }
+    if(user.plan === "pro") return true;
 
     if(user.credits <= 0){
-        alert("❌ Daily limit finished! Try again tomorrow or upgrade later.");
+        alert("❌ Daily limit finished!");
         return false;
     }
 
@@ -53,96 +47,58 @@ function canGenerate(){
     return true;
 }
 
-/* ---------------- STYLE ENGINE ---------------- */
+/* ---------------- STYLE ---------------- */
 function getStyleBoost(){
     switch(style.value){
         case "Realistic":
-            return "ultra realistic DSLR photography, cinematic lighting, 8k, sharp focus";
+            return "ultra realistic DSLR photography, cinematic lighting, 8k";
         case "Anime":
             return "anime style, cinematic lighting, ultra detailed illustration";
         case "Cinematic":
-            return "movie scene, cinematic lighting, dramatic composition, film still";
+            return "cinematic movie scene, dramatic lighting";
         default:
-            return "high quality, ultra detailed professional render";
+            return "high quality, ultra detailed";
     }
 }
 
 /* ---------------- PROMPT ---------------- */
 function buildPrompt(text){
-    return `${text}, ${getStyleBoost()}, ultra detailed, best quality, 4k`;
+    return `${text}, ${getStyleBoost()}, ultra detailed, 4k, best quality`;
 }
 
-/* ---------------- FLUX AI ---------------- */
-async function generateWithFLUX(prompt){
+/* ================= SAFE AI CALL (NO CORS ISSUE) ================= */
+async function generateImage(prompt){
 
-    const res = await fetch("https://api.replicate.com/v1/predictions", {
-        method: "POST",
-        headers: {
-            "Authorization": `Token ${REPLICATE_API_TOKEN}`,
-            "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-            version: "black-forest-labs/flux-schnell",
-            input: { prompt }
-        })
-    });
-
-    const prediction = await res.json();
-
-    let output = null;
-
-    while(!output){
-        const poll = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
-            headers: {
-                "Authorization": `Token ${REPLICATE_API_TOKEN}`
-            }
-        });
-
-        const data = await poll.json();
-
-        if(data.status === "succeeded"){
-            output = Array.isArray(data.output) ? data.output[0] : data.output;
-        }
-
-        if(data.status === "failed"){
-            return null;
-        }
-
-        await new Promise(r => setTimeout(r, 1500));
+    try {
+        const res = await fetch("https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt));
+        return res.url;
+    } catch (err) {
+        console.log(err);
+        return null;
     }
-
-    return output;
 }
 
 /* ---------------- HISTORY ---------------- */
 function saveHistory(url){
     let data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
-
-    data.unshift({ url, time: Date.now() });
-
-    if(data.length > 50) data = data.slice(0, 50);
-
+    data.unshift({ url });
+    if(data.length > 50) data = data.slice(0,50);
     localStorage.setItem("sibghat_history", JSON.stringify(data));
 }
 
 function addToHistory(url){
     const img = document.createElement("img");
     img.src = url;
-
     img.onclick = () => {
         resultImage.src = url;
         resultImage.style.display = "block";
     };
-
     historyContainer.prepend(img);
 }
 
 function loadHistory(){
     const data = JSON.parse(localStorage.getItem("sibghat_history") || "[]");
-
-    data.forEach(item => {
-        addToHistory(item.url);
-    });
+    data.forEach(item => addToHistory(item.url));
 }
 
 /* ---------------- LOADING ---------------- */
@@ -162,9 +118,7 @@ generateBtn.addEventListener("click", async () => {
         return;
     }
 
-    if(!canGenerate()){
-        return;
-    }
+    if(!canGenerate()) return;
 
     setLoading(true);
 
@@ -173,7 +127,8 @@ generateBtn.addEventListener("click", async () => {
 
     const finalPrompt = buildPrompt(text);
 
-    let imageURL = await generateWithFLUX(finalPrompt);
+    // SAFE WORKING IMAGE GENERATION
+    const imageURL = await generateImage(finalPrompt);
 
     setLoading(false);
 
