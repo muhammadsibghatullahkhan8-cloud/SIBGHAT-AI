@@ -1,54 +1,56 @@
-const prompt = document.getElementById("prompt");
+const promptInput = document.getElementById("prompt");
 const style = document.getElementById("style");
 const generateBtn = document.getElementById("generateBtn");
 const resultImage = document.getElementById("resultImage");
 const downloadBtn = document.getElementById("downloadBtn");
 const loading = document.getElementById("loading");
 
-generateBtn.addEventListener("click", () => {
+generateBtn.addEventListener("click", async () => {
 
-    const userPrompt = prompt.value.trim();
+    const userPrompt = promptInput.value.trim();
 
     if (userPrompt === "") {
         alert("Please enter a prompt.");
         return;
     }
 
-    // Show Loading
-    loading.classList.remove("hidden");
+    // UI state
+    loading.style.display = "block";
     resultImage.style.display = "none";
-    downloadBtn.classList.add("hidden");
+    downloadBtn.style.display = "none";
 
-    // Prompt + Style + Quality Enhancement
+    // Enhance prompt (PRO level)
     let finalPrompt = userPrompt;
 
     if (style.value !== "") {
         finalPrompt += ", " + style.value;
     }
 
-    finalPrompt += ", masterpiece, best quality, ultra detailed, 8k, sharp focus, cinematic lighting";
+    finalPrompt += ", ultra realistic, highly detailed, 8k, cinematic lighting, masterpiece";
 
-    // Generate Image URL
+    // Safe image API (Pollinations)
     const imageURL =
         "https://image.pollinations.ai/prompt/" +
         encodeURIComponent(finalPrompt) +
-        "?t=" + Date.now();
+        "?width=1024&height=1024&seed=" + Date.now();
 
-    // Success
-    resultImage.onload = () => {
-        loading.classList.add("hidden");
+    // preload image (better UX)
+    const img = new Image();
+
+    img.onload = function () {
+        resultImage.src = imageURL;
+
+        loading.style.display = "none";
         resultImage.style.display = "block";
+
         downloadBtn.href = imageURL;
-        downloadBtn.classList.remove("hidden");
+        downloadBtn.style.display = "inline-block";
     };
 
-    // Error
-    resultImage.onerror = () => {
-        loading.classList.add("hidden");
-        alert("Failed to generate image. Please try again.");
+    img.onerror = function () {
+        loading.style.display = "none";
+        alert("Image generation failed. Try again.");
     };
 
-    // Load Image
-    resultImage.src = imageURL;
-
+    img.src = imageURL;
 });
