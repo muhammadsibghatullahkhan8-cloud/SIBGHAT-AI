@@ -6,7 +6,8 @@ const downloadBtn = document.getElementById("downloadBtn");
 const loading = document.getElementById("loading");
 const historyContainer = document.getElementById("history");
 
-const DEEPAI_KEY = "e56a67d0-84d7-435f-a0c9-64b1779df06c";
+/* ⚠️ PUT YOUR NEW REPLICATE TOKEN HERE */
+const REPLICATE_API_TOKEN = "PASTE_YOUR_TOKEN_HERE";
 
 /* ---------------- FREE STARTUP USER SYSTEM ---------------- */
 let user = {
@@ -35,11 +36,11 @@ function updateUI(){
     console.log("💰 Plan:", user.plan, "Credits:", user.credits);
 }
 
-/* ---------------- FREE CREDIT SYSTEM ---------------- */
+/* ---------------- CREDIT SYSTEM ---------------- */
 function canGenerate(){
 
     if(user.plan === "pro"){
-        return true; // future paid users unlimited
+        return true;
     }
 
     if(user.credits <= 0){
@@ -50,14 +51,6 @@ function canGenerate(){
     user.credits--;
     updateUI();
     return true;
-}
-
-/* ---------------- CLEAN PROMPT ---------------- */
-function cleanPrompt(text){
-    return text
-        .replace(/\s+/g, " ")
-        .replace(/make|create|generate|draw|image of/gi, "")
-        .trim();
 }
 
 /* ---------------- STYLE ENGINE ---------------- */
@@ -74,46 +67,55 @@ function getStyleBoost(){
     }
 }
 
-/* ---------------- QUALITY BOOST ---------------- */
-function getQualityBoost(){
-    return "masterpiece, best quality, ultra detailed, sharp focus, 4k resolution, professional composition";
-}
-
 /* ---------------- PROMPT ENGINE ---------------- */
 function buildPrompt(text){
-
-    const clean = cleanPrompt(text);
     const styleBoost = getStyleBoost();
-    const quality = getQualityBoost();
-
-    return `${clean}, ${styleBoost}, ${quality}`;
+    return `${text}, ${styleBoost}, ultra detailed, best quality, 4k, sharp focus`;
 }
 
-/* ---------------- AI ENGINE ---------------- */
-async function generateWithDeepAI(prompt, retry = 2){
+/* ---------------- FLUX (REPLICATE) ENGINE ---------------- */
+async function generateWithFLUX(prompt){
 
-    try {
-        const res = await fetch("https://api.deepai.org/api/text2img", {
-            method: "POST",
+    const res = await fetch("https://api.replicate.com/v1/predictions", {
+        method: "POST",
+        headers: {
+            "Authorization": `Token ${REPLICATE_API_TOKEN}`,
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({
+            version: "black-forest-labs/flux-schnell",
+            input: {
+                prompt: prompt
+            }
+        })
+    });
+
+    const prediction = await res.json();
+
+    let output = null;
+
+    while(!output){
+        const poll = await fetch(`https://api.replicate.com/v1/predictions/${prediction.id}`, {
             headers: {
-                "Api-Key": DEEPAI_KEY
-            },
-            body: new URLSearchParams({ text: prompt })
+                "Authorization": `Token ${REPLICATE_API_TOKEN}`
+            }
         });
 
-        const data = await res.json();
+        const data = await poll.json();
 
-        if (data.output_url) return data.output_url;
+        if(data.status === "succeeded"){
+            output = data.output[0];
+            break;
+        }
 
-        if (retry > 0) return await generateWithDeepAI(prompt, retry - 1);
+        if(data.status === "failed"){
+            return null;
+        }
 
-        return null;
-
-    } catch (err) {
-        console.log("AI Error:", err);
-        if (retry > 0) return await generateWithDeepAI(prompt, retry - 1);
-        return null;
+        await new Promise(r => setTimeout(r, 1500));
     }
+
+    return output;
 }
 
 /* ---------------- HISTORY SYSTEM ---------------- */
@@ -151,20 +153,14 @@ function loadHistory(){
     });
 }
 
-/* ---------------- LOADING CONTROL ---------------- */
+/* ---------------- LOADING ---------------- */
 function setLoading(state){
-    if(state){
-        loading.style.display = "block";
-        generateBtn.disabled = true;
-        generateBtn.innerText = "Generating AI...";
-    } else {
-        loading.style.display = "none";
-        generateBtn.disabled = false;
-        generateBtn.innerText = "✨ Generate Image";
-    }
+    loading.style.display = state ? "block" : "none";
+    generateBtn.disabled = state;
+    generateBtn.innerText = state ? "Generating AI..." : "✨ Generate Image";
 }
 
-/* ---------------- MAIN GENERATION ---------------- */
+/* ---------------- MAIN ---------------- */
 generateBtn.addEventListener("click", async () => {
 
     const userText = promptInput.value.trim();
@@ -174,7 +170,6 @@ generateBtn.addEventListener("click", async () => {
         return;
     }
 
-    // 💰 FREE LIMIT CHECK
     if(!canGenerate()){
         return;
     }
@@ -186,19 +181,17 @@ generateBtn.addEventListener("click", async () => {
 
     const finalPrompt = buildPrompt(userText);
 
-    let imageURL = await generateWithDeepAI(finalPrompt);
-
-    // fallback system
-    if(!imageURL){
-        imageURL = `https://image.pollinations.ai/prompt/${encodeURIComponent(finalPrompt)}?t=${Date.now()}`;
-    }
+    let imageURL = await generateWithFLUX(finalPrompt);
 
     setLoading(false);
 
+    if(!imageURL){
+        alert("Image generation failed. Try again.");
+        return;
+    }
+
     resultImage.src = imageURL;
     resultImage.style.display = "block";
-
-    setTimeout(() => resultImage.classList.add("show"), 50);
 
     downloadBtn.href = imageURL;
     downloadBtn.style.display = "inline-block";
