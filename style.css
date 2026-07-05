@@ -51,9 +51,9 @@ body {
 }
 
 /* Auth Sections */
-#login-section, #signup-section {
+#login-section, #signup-section, #owner-section {
   max-width: 400px;
-  margin: 60px auto;
+  margin: 40px auto;
   background: rgba(15,23,42,0.85);
   backdrop-filter: blur(12px);
   padding: 30px;
@@ -61,10 +61,11 @@ body {
   box-shadow: 0 0 25px rgba(0,229,255,.3);
   text-align: center;
 }
-#login-section h2, #signup-section h2 {
+#login-section h2, #signup-section h2, #owner-section h2 {
   font-family: 'Orbitron', sans-serif;
   color: #00e5ff;
   margin-bottom: 20px;
+  text-shadow: 0 0 10px rgba(0,229,255,.7);
 }
 #login-section label, #signup-section label {
   display: block;
@@ -72,7 +73,7 @@ body {
   text-align: left;
   color: #cbd5e1;
 }
-#login-section input, #signup-section input {
+#login-section input, #signup-section input, #owner-section input {
   width: 100%;
   padding: 12px;
   border-radius: 10px;
@@ -82,11 +83,12 @@ body {
   margin-bottom: 15px;
   transition: border 0.3s ease;
 }
-#login-section input:focus, #signup-section input:focus {
+#login-section input:focus, #signup-section input:focus, #owner-section input:focus {
   border: 1px solid #00e5ff;
   outline: none;
+  box-shadow: 0 0 10px rgba(0,229,255,.6);
 }
-#login-section button, #signup-section button {
+#login-section button, #signup-section button, #owner-section button {
   width: 100%;
   padding: 12px;
   background: linear-gradient(90deg,#00e5ff,#3b82f6);
@@ -97,7 +99,7 @@ body {
   cursor: pointer;
   transition: 0.3s;
 }
-#login-section button:hover, #signup-section button:hover {
+#login-section button:hover, #signup-section button:hover, #owner-section button:hover {
   transform: scale(1.05);
   box-shadow: 0 0 20px rgba(0,229,255,.7);
 }
@@ -259,16 +261,4 @@ button:hover {
   display: none;
   opacity: 0;
   transform: scale(0.96);
-  transition: all 0.5s ease;
-  box-shadow: 0 0 25px rgba(0,229,255,.3);
-}
-#resultImage.show {
-  opacity: 1;
-  transform: scale(1);
-}
-
-/* Download */
-#downloadBtn {
-  display: inline-block;
-  margin-top: 20px;
-  padding: 15px 30px
+  transition: all 0.5s
