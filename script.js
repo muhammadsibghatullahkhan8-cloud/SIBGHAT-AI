@@ -132,15 +132,24 @@ generateBtn.addEventListener("click", async () => {
 
   loading.classList.remove("hidden");
   resultImage.style.display = "none";
+  resultImage.style.opacity = "0";
   downloadBtn.style.display = "none";
 
   const finalPrompt = buildPrompt(text);
   const imageURL = generateImage(finalPrompt);
 
+  // Hide loading
   loading.classList.add("hidden");
 
+  // Show image with fade-in
   resultImage.src = imageURL;
   resultImage.style.display = "block";
+  setTimeout(() => {
+    resultImage.style.opacity = "1";
+    resultImage.style.transform = "scale(1)";
+  }, 100); // small delay for transition
+
+  // Show download button
   downloadBtn.href = imageURL;
   downloadBtn.style.display = "inline-block";
 });
