@@ -39,14 +39,16 @@ signupForm.addEventListener("submit", function(e) {
   const newUsername = document.getElementById("newUsername").value.trim();
   const newPassword = document.getElementById("newPassword").value.trim();
 
-  if (!newUsername || !newPassword) {
-    signupMessage.textContent = "❌ Please fill all fields!";
+  if (!newUsername || newPassword.length < 6) {
+    signupMessage.textContent = "❌ Username required & password must be 6+ chars.";
+    signupMessage.className = "error";
     return;
   }
 
   // Save user to localStorage (demo only)
   localStorage.setItem("sibghat_user", JSON.stringify({username: newUsername, password: newPassword}));
   signupMessage.textContent = "✅ Signup successful! Please login.";
+  signupMessage.className = "success";
   signupSection.style.display = "none";
   loginSection.style.display = "block";
 });
@@ -61,10 +63,12 @@ loginForm.addEventListener("submit", function (e) {
 
   if (savedUser && username === savedUser.username && password === savedUser.password) {
     loginMessage.textContent = "✅ Login successful!";
+    loginMessage.className = "success";
     loginSection.style.display = "none";
-    appSection.style.display = "block";
+    appSection.style.display = "flex";
   } else {
     loginMessage.textContent = "❌ Invalid credentials!";
+    loginMessage.className = "error";
   }
 });
 
