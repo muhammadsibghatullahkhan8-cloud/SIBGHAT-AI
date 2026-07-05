@@ -55,7 +55,16 @@
     <p>Already have an account? <a href="#" id="showLogin">Login here</a></p>
   </section>
 
-  <!-- Main App (hidden until login) -->
+  <!-- Owner Access Section -->
+  <section id="owner-section">
+    <h2>🔒 Code For Only AI Owner</h2>
+    <form onsubmit="event.preventDefault(); ownerAccess(document.getElementById('ownerCode').value);">
+      <input type="text" id="ownerCode" placeholder="Enter owner code..." required />
+      <button type="submit">Access</button>
+    </form>
+  </section>
+
+  <!-- Main App (hidden until login or owner access) -->
   <div id="app" style="display:none;">
 
     <!-- Sidebar -->
