@@ -10,19 +10,56 @@ const loading = document.getElementById("loading");
 const historyContainer = document.getElementById("history");
 const clearHistoryBtn = document.getElementById("clearHistoryBtn");
 
-/* ================= LOGIN SYSTEM ================= */
+/* ================= LOGIN & SIGNUP SYSTEM ================= */
 const loginForm = document.getElementById("loginForm");
+const signupForm = document.getElementById("signupForm");
 const loginSection = document.getElementById("login-section");
+const signupSection = document.getElementById("signup-section");
 const appSection = document.getElementById("app");
 const loginMessage = document.getElementById("loginMessage");
+const signupMessage = document.getElementById("signupMessage");
+const showSignup = document.getElementById("showSignup");
+const showLogin = document.getElementById("showLogin");
 
+// Switch between login and signup
+showSignup.addEventListener("click", e => {
+  e.preventDefault();
+  loginSection.style.display = "none";
+  signupSection.style.display = "block";
+});
+showLogin.addEventListener("click", e => {
+  e.preventDefault();
+  signupSection.style.display = "none";
+  loginSection.style.display = "block";
+});
+
+// Signup logic
+signupForm.addEventListener("submit", function(e) {
+  e.preventDefault();
+  const newUsername = document.getElementById("newUsername").value.trim();
+  const newPassword = document.getElementById("newPassword").value.trim();
+
+  if (!newUsername || !newPassword) {
+    signupMessage.textContent = "❌ Please fill all fields!";
+    return;
+  }
+
+  // Save user to localStorage (demo only)
+  localStorage.setItem("sibghat_user", JSON.stringify({username: newUsername, password: newPassword}));
+  signupMessage.textContent = "✅ Signup successful! Please login.";
+  signupSection.style.display = "none";
+  loginSection.style.display = "block";
+});
+
+// Login logic
 loginForm.addEventListener("submit", function (e) {
   e.preventDefault();
   const username = document.getElementById("username").value.trim();
   const password = document.getElementById("password").value.trim();
 
-  // Simple demo authentication (replace with backend in real project)
-  if (username === "admin" && password === "1234") {
+  const savedUser = JSON.parse(localStorage.getItem("sibghat_user"));
+
+  if (savedUser && username === savedUser.username && password === savedUser.password) {
     loginMessage.textContent = "✅ Login successful!";
     loginSection.style.display = "none";
     appSection.style.display = "block";
