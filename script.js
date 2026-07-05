@@ -102,14 +102,32 @@ function setPrompt(text) {
   promptInput.value = text;
 }
 
+// Build prompt with style/category
+function buildPrompt(text) {
+  let styleBoost = "";
+  if (style.value === "Realistic") styleBoost = "ultra realistic DSLR photography, cinematic lighting, 8k";
+  else if (style.value === "Anime") styleBoost = "anime style, ultra detailed illustration";
+  else if (style.value === "Cinematic") styleBoost = "cinematic movie scene, dramatic lighting";
+  else styleBoost = "high quality, ultra detailed";
+
+  let categoryBoost = "";
+  if (category.value === "car") categoryBoost = "luxury sports car, automotive photography";
+  else if (category.value === "space") categoryBoost = "outer space, galaxies, sci-fi scene";
+  else if (category.value === "natural") categoryBoost = "beautiful nature, mountains, forest, river";
+  else if (category.value === "city") categoryBoost = "futuristic city, neon lights, cyberpunk";
+  else if (category.value === "anime") categoryBoost = "anime style illustration";
+
+  return `professional photo, ${text}, ${styleBoost}, ${categoryBoost}, ultra detailed, realistic lighting, 8k, sharp focus, no watermark, no text`;
+}
+
+// Generate image (fixed)
 async function generateImage(prompt) {
   try {
-    const res = await fetch(
-      "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt.trim())
-    );
-    return res.url;
+    // Pollinations API returns direct image link
+    const imageURL = "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt.trim());
+    return imageURL;
   } catch (err) {
-    console.log(err);
+    console.error("Image generation error:", err);
     return null;
   }
 }
@@ -125,7 +143,8 @@ generateBtn.addEventListener("click", async () => {
   resultImage.style.display = "none";
   downloadBtn.style.display = "none";
 
-  const imageURL = await generateImage(text);
+  const finalPrompt = buildPrompt(text);
+  const imageURL = await generateImage(finalPrompt);
 
   loading.classList.add("hidden");
 
