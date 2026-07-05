@@ -45,11 +45,9 @@ signupForm.addEventListener("submit", function(e) {
     return;
   }
 
-  // Save user to localStorage
   const userData = { username: newUsername, password: newPassword };
   localStorage.setItem("sibghat_user", JSON.stringify(userData));
 
-  // Auto login
   signupMessage.textContent = "✅ Signup successful! Logged in automatically.";
   signupMessage.className = "success";
   signupSection.style.display = "none";
@@ -120,16 +118,9 @@ function buildPrompt(text) {
   return `professional photo, ${text}, ${styleBoost}, ${categoryBoost}, ultra detailed, realistic lighting, 8k, sharp focus, no watermark, no text`;
 }
 
-// Generate image (fixed)
-async function generateImage(prompt) {
-  try {
-    // Pollinations API returns direct image link
-    const imageURL = "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt.trim());
-    return imageURL;
-  } catch (err) {
-    console.error("Image generation error:", err);
-    return null;
-  }
+// Generate image (direct URL)
+function generateImage(prompt) {
+  return "https://image.pollinations.ai/prompt/" + encodeURIComponent(prompt.trim());
 }
 
 generateBtn.addEventListener("click", async () => {
@@ -144,14 +135,9 @@ generateBtn.addEventListener("click", async () => {
   downloadBtn.style.display = "none";
 
   const finalPrompt = buildPrompt(text);
-  const imageURL = await generateImage(finalPrompt);
+  const imageURL = generateImage(finalPrompt);
 
   loading.classList.add("hidden");
-
-  if (!imageURL) {
-    alert("Image generation failed!");
-    return;
-  }
 
   resultImage.src = imageURL;
   resultImage.style.display = "block";
