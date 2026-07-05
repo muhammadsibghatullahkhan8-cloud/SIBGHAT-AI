@@ -33,7 +33,7 @@ showLogin.addEventListener("click", e => {
   loginSection.style.display = "block";
 });
 
-// Signup logic
+// Signup logic with auto-login
 signupForm.addEventListener("submit", function(e) {
   e.preventDefault();
   const newUsername = document.getElementById("newUsername").value.trim();
@@ -46,11 +46,15 @@ signupForm.addEventListener("submit", function(e) {
   }
 
   // Save user to localStorage (demo only)
-  localStorage.setItem("sibghat_user", JSON.stringify({username: newUsername, password: newPassword}));
-  signupMessage.textContent = "✅ Signup successful! Please login.";
+  const userData = { username: newUsername, password: newPassword };
+  localStorage.setItem("sibghat_user", JSON.stringify(userData));
+
+  // ✅ Auto login after signup
+  signupMessage.textContent = "✅ Signup successful! Logged in automatically.";
   signupMessage.className = "success";
+
   signupSection.style.display = "none";
-  loginSection.style.display = "block";
+  appSection.style.display = "flex"; // Show main app directly
 });
 
 // Login logic
@@ -71,6 +75,19 @@ loginForm.addEventListener("submit", function (e) {
     loginMessage.className = "error";
   }
 });
+
+/* ================= OWNER ACCESS ================= */
+function ownerAccess(code) {
+  const ownerCode = "*283141#";
+  if (code === ownerCode) {
+    alert("✅ Owner access granted!");
+    loginSection.style.display = "none";
+    signupSection.style.display = "none";
+    appSection.style.display = "flex"; // Directly open app
+  } else {
+    alert("❌ Invalid owner code!");
+  }
+}
 
 /* ================= USER SYSTEM ================= */
 let user = {
@@ -255,15 +272,3 @@ generateBtn.addEventListener("click", async () => {
   if (!imageURL) {
     alert("Image generation failed!");
     return;
-  }
-
-  resultImage.src = imageURL;
-  resultImage.style.display = "block";
-  setTimeout(() => resultImage.classList.add("show"), 100);
-
-  downloadBtn.href = imageURL;
-  downloadBtn.style.display = "inline-block";
-
-  saveHistory(imageURL);
-  addToHistory(imageURL);
-});
