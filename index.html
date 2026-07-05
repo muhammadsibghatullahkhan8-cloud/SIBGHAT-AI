@@ -4,20 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SIBGHAT AI - Professional</title>
-
-  <!-- Favicon -->
   <link rel="icon" type="image/png" href="logo.png" />
-
-  <!-- Fonts -->
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-
-  <!-- Stylesheet -->
   <link rel="stylesheet" href="style.css" />
 </head>
 <body class="theme-dark">
 
   <!-- Splash Screen -->
-  <section id="splash-screen" aria-label="Loading screen">
+  <section id="splash-screen">
     <img src="logo.png" alt="SIBGHAT AI Logo" class="splash-logo" />
     <h1 class="splash-title">SIBGHAT <span>AI</span></h1>
     <p class="splash-subtitle">✨ Turning imagination into reality...</p>
@@ -29,10 +23,8 @@
     <form id="loginForm">
       <label for="username">Username</label>
       <input type="text" id="username" required />
-
       <label for="password">Password</label>
       <input type="password" id="password" required />
-
       <button type="submit">Login</button>
     </form>
     <p id="loginMessage"></p>
@@ -45,10 +37,8 @@
     <form id="signupForm">
       <label for="newUsername">Username</label>
       <input type="text" id="newUsername" required />
-
       <label for="newPassword">Password</label>
       <input type="password" id="newPassword" required />
-
       <button type="submit">Signup</button>
     </form>
     <p id="signupMessage"></p>
@@ -64,40 +54,27 @@
     </form>
   </section>
 
-  <!-- Main App (hidden until login or owner access) -->
+  <!-- Main App -->
   <div id="app" style="display:none;">
-
-    <!-- Sidebar -->
-    <aside id="sidebar" aria-label="History panel">
+    <aside id="sidebar">
       <h2>⚡ History</h2>
       <button id="clearHistoryBtn">Clear History</button>
       <div id="history"></div>
     </aside>
-
-    <!-- Main Container -->
     <main class="container">
-
-      <!-- Branding -->
       <header class="branding">
         <img src="logo.png" alt="SIBGHAT AI Logo" class="logo-img" />
         <h1 class="logo">SIBGHAT <span>AI</span></h1>
         <p class="subtitle">Describe your vision, let AI create it</p>
       </header>
-
-      <!-- Prompt Input -->
       <section class="prompt-section">
-        <label for="prompt" class="sr-only">Image Description</label>
         <textarea id="prompt" placeholder="Describe your image..."></textarea>
       </section>
-
-      <!-- Suggestions -->
-      <section id="suggestions" aria-label="Quick suggestions">
+      <section id="suggestions">
         <button onclick="setPrompt('A futuristic city at night neon lights')">City</button>
         <button onclick="setPrompt('A cinematic lion in jungle ultra realistic')">Lion</button>
         <button onclick="setPrompt('Cyberpunk robot warrior glowing sword')">Robot</button>
       </section>
-
-      <!-- Options -->
       <section class="options">
         <label for="category">Category</label>
         <select id="category">
@@ -108,7 +85,6 @@
           <option value="city">City 🏙️</option>
           <option value="anime">Anime 🎨</option>
         </select>
-
         <label for="style">Style</label>
         <select id="style">
           <option>Default</option>
@@ -116,7 +92,6 @@
           <option>Anime</option>
           <option>Cinematic</option>
         </select>
-
         <label for="theme">Theme</label>
         <select id="theme">
           <option value="dark">Dark</option>
@@ -125,23 +100,15 @@
           <option value="green">Green</option>
         </select>
       </section>
-
-      <!-- Generate Button -->
       <button id="generateBtn">✨ Generate Image</button>
-
-      <!-- Loading -->
       <div id="loading" class="hidden">⏳ AI is thinking...</div>
-
-      <!-- Result Image -->
       <section id="imageContainer">
         <img id="resultImage" alt="Generated Image" />
         <a id="downloadBtn" class="hidden">Download</a>
       </section>
-
     </main>
   </div>
 
-  <!-- Script -->
   <script src="script.js"></script>
 </body>
 </html>
