@@ -10,6 +10,27 @@ const loading = document.getElementById("loading");
 const historyContainer = document.getElementById("history");
 const clearHistoryBtn = document.getElementById("clearHistoryBtn");
 
+/* ================= LOGIN SYSTEM ================= */
+const loginForm = document.getElementById("loginForm");
+const loginSection = document.getElementById("login-section");
+const appSection = document.getElementById("app");
+const loginMessage = document.getElementById("loginMessage");
+
+loginForm.addEventListener("submit", function (e) {
+  e.preventDefault();
+  const username = document.getElementById("username").value.trim();
+  const password = document.getElementById("password").value.trim();
+
+  // Simple demo authentication (replace with backend in real project)
+  if (username === "admin" && password === "1234") {
+    loginMessage.textContent = "✅ Login successful!";
+    loginSection.style.display = "none";
+    appSection.style.display = "block";
+  } else {
+    loginMessage.textContent = "❌ Invalid credentials!";
+  }
+});
+
 /* ================= USER SYSTEM ================= */
 let user = {
   plan: "free",
