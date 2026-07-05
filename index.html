@@ -36,6 +36,23 @@
       <button type="submit">Login</button>
     </form>
     <p id="loginMessage"></p>
+    <p>Not registered? <a href="#" id="showSignup">Signup here</a></p>
+  </section>
+
+  <!-- Signup Section -->
+  <section id="signup-section" style="display:none;">
+    <h2>📝 Signup</h2>
+    <form id="signupForm">
+      <label for="newUsername">Username</label>
+      <input type="text" id="newUsername" required />
+
+      <label for="newPassword">Password</label>
+      <input type="password" id="newPassword" required />
+
+      <button type="submit">Signup</button>
+    </form>
+    <p id="signupMessage"></p>
+    <p>Already have an account? <a href="#" id="showLogin">Login here</a></p>
   </section>
 
   <!-- Main App (hidden until login) -->
