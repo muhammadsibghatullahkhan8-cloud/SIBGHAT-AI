@@ -102,10 +102,6 @@ function setPrompt(text) {
   promptInput.value = text;
 }
 
-function canGenerate() {
-  return true; // simplified for demo
-}
-
 async function generateImage(prompt) {
   try {
     const res = await fetch(
@@ -124,7 +120,6 @@ generateBtn.addEventListener("click", async () => {
     alert("Please enter a prompt!");
     return;
   }
-  if (!canGenerate()) return;
 
   loading.classList.remove("hidden");
   resultImage.style.display = "none";
@@ -143,4 +138,10 @@ generateBtn.addEventListener("click", async () => {
   resultImage.style.display = "block";
   downloadBtn.href = imageURL;
   downloadBtn.style.display = "inline-block";
+});
+
+/* ================= HISTORY ================= */
+clearHistoryBtn.addEventListener("click", () => {
+  localStorage.removeItem("sibghat_history");
+  historyContainer.innerHTML = "";
 });
