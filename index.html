@@ -1,196 +1,103 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SIBGHAT AI</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SIBGHAT AI - Professional</title>
 
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-<style>
-:root {
-    --bg: #0f172a;
-    --text: #ffffff;
-    --accent: #00e5ff;
-}
-
-body {
-    margin: 0;
-    font-family: 'Poppins', sans-serif;
-    background: var(--bg);
-    color: var(--text);
-    overflow-x: hidden;
-}
-
-/* splash */
-#splash-screen{
-    position:fixed;
-    width:100%;
-    height:100vh;
-    background:#020617;
-    display:flex;
-    flex-direction:column;
-    justify-content:center;
-    align-items:center;
-    z-index:9999;
-}
-
-/* layout */
-#app { display: flex; }
-
-/* sidebar */
-#sidebar {
-    width: 260px;
-    background: rgba(2,6,23,0.9);
-    height: 100vh;
-    padding: 20px;
-    border-right: 1px solid #1e293b;
-}
-
-#sidebar h2 {
-    color: var(--accent);
-}
-
-/* main */
-.container {
-    flex: 1;
-    text-align: center;
-    padding: 40px 20px;
-}
-
-/* logo */
-.logo-img {
-    width: 90px;
-    border-radius: 12px;
-}
-
-/* inputs */
-textarea, select {
-    width: 80%;
-    max-width: 500px;
-    padding: 14px;
-    margin: 8px 0;
-    border-radius: 12px;
-    border: 1px solid #1e293b;
-    background: rgba(255,255,255,0.05);
-    color: white;
-}
-
-/* buttons */
-button {
-    background: linear-gradient(90deg, var(--accent), #3b82f6);
-    border: none;
-    padding: 14px 28px;
-    border-radius: 12px;
-    color: white;
-    font-weight: bold;
-    cursor: pointer;
-    margin-top:10px;
-}
-
-/* suggestions */
-#suggestions button{
-    margin:5px;
-    padding:8px 12px;
-    border-radius:20px;
-    background:rgba(0,229,255,0.15);
-    color:var(--accent);
-}
-
-/* image */
-#resultImage{
-    width:100%;
-    max-width:500px;
-    border-radius:15px;
-    display:none;
-}
-
-/* history */
-#history img{
-    width:100%;
-    margin-top:10px;
-    border-radius:10px;
-    cursor:pointer;
-}
-
-/* mobile */
-@media(max-width:768px){
-    #sidebar{ display:none; }
-}
-</style>
+  <!-- Stylesheet -->
+  <link rel="stylesheet" href="style.css" />
 </head>
+<body class="theme-dark">
 
-<body>
+  <!-- Splash Screen -->
+  <section id="splash-screen" aria-label="Loading screen">
+    <img src="logo.png" alt="SIBGHAT AI Logo" class="splash-logo" />
+    <h1 class="splash-title">SIBGHAT <span>AI</span></h1>
+    <p class="splash-subtitle">✨ Turning imagination into reality...</p>
+  </section>
 
-<!-- SPLASH -->
-<div id="splash-screen">
-    <h1>SIBGHAT AI</h1>
-</div>
+  <!-- Main App -->
+  <div id="app">
 
-<div id="app">
+    <!-- Sidebar -->
+    <aside id="sidebar" aria-label="History panel">
+      <h2>⚡ History</h2>
+      <button id="clearHistoryBtn">Clear History</button>
+      <div id="history"></div>
+    </aside>
 
-    <!-- SIDEBAR -->
-    <div id="sidebar">
-        <h2>⚡ History</h2>
-        <button onclick="clearHistory()">Clear History</button>
-        <div id="history"></div>
-    </div>
+    <!-- Main Container -->
+    <main class="container">
 
-    <!-- MAIN -->
-    <div class="container">
+      <!-- Branding -->
+      <header class="branding">
+        <img src="logo.png" alt="SIBGHAT AI Logo" class="logo-img" />
+        <h1 class="logo">SIBGHAT <span>AI</span></h1>
+        <p class="subtitle">Describe your vision, let AI create it</p>
+      </header>
 
-        <img src="logo.png" class="logo-img">
-
-        <h1>SIBGHAT AI</h1>
-
+      <!-- Prompt Input -->
+      <section class="prompt-section">
+        <label for="prompt" class="sr-only">Image Description</label>
         <textarea id="prompt" placeholder="Describe your image..."></textarea>
+      </section>
 
-        <!-- SUGGESTIONS -->
-        <div id="suggestions">
-            <button onclick="setPrompt('A futuristic city at night neon lights')">City</button>
-            <button onclick="setPrompt('A cinematic lion in jungle ultra realistic')">Lion</button>
-            <button onclick="setPrompt('Cyberpunk robot warrior glowing sword')">Robot</button>
-        </div>
+      <!-- Suggestions -->
+      <section id="suggestions" aria-label="Quick suggestions">
+        <button onclick="setPrompt('A futuristic city at night neon lights')">City</button>
+        <button onclick="setPrompt('A cinematic lion in jungle ultra realistic')">Lion</button>
+        <button onclick="setPrompt('Cyberpunk robot warrior glowing sword')">Robot</button>
+      </section>
 
-        <!-- CATEGORY -->
+      <!-- Options -->
+      <section class="options">
+        <label for="category">Category</label>
         <select id="category">
-            <option value="">No Category</option>
-            <option value="car">Car 🚗</option>
-            <option value="space">Space 🌌</option>
-            <option value="natural">Natural 🌿</option>
-            <option value="city">City 🏙️</option>
-            <option value="anime">Anime 🎨</option>
+          <option value="">No Category</option>
+          <option value="car">Car 🚗</option>
+          <option value="space">Space 🌌</option>
+          <option value="natural">Natural 🌿</option>
+          <option value="city">City 🏙️</option>
+          <option value="anime">Anime 🎨</option>
         </select>
 
-        <!-- STYLE -->
+        <label for="style">Style</label>
         <select id="style">
-            <option>Default</option>
-            <option>Realistic</option>
-            <option>Anime</option>
-            <option>Cinematic</option>
+          <option>Default</option>
+          <option>Realistic</option>
+          <option>Anime</option>
+          <option>Cinematic</option>
         </select>
 
-        <!-- THEME -->
+        <label for="theme">Theme</label>
         <select id="theme">
-            <option value="dark">Dark</option>
-            <option value="light">Light</option>
-            <option value="purple">Purple</option>
-            <option value="green">Green</option>
+          <option value="dark">Dark</option>
+          <option value="light">Light</option>
+          <option value="purple">Purple</option>
+          <option value="green">Green</option>
         </select>
+      </section>
 
-        <button id="generateBtn">✨ Generate Image</button>
+      <!-- Generate Button -->
+      <button id="generateBtn">✨ Generate Image</button>
 
-        <div id="loading">⏳ AI is thinking...</div>
+      <!-- Loading -->
+      <div id="loading" class="hidden">⏳ AI is thinking...</div>
 
-        <img id="resultImage">
+      <!-- Result Image -->
+      <section id="imageContainer">
+        <img id="resultImage" alt="Generated Image" />
+        <a id="downloadBtn" class="hidden">Download</a>
+      </section>
 
-        <a id="downloadBtn">Download</a>
+    </main>
+  </div>
 
-    </div>
-
-</div>
-
-<script src="script.js"></script>
-
+  <!-- Script -->
+  <script src="script.js"></script>
 </body>
 </html>
