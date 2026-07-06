@@ -33,7 +33,7 @@ window.addEventListener("load", () => {
 });
 
 /* ================= GEMINI API INTEGRATION ================= */
-const GEMINI_API_KEY = "YOUR_NEW_API_KEY"; // apna naya key yahan daalo
+const GEMINI_API_KEY = "AQ.Ab8RN6Lw3M45ioeB2ijLXwF4gqdiKrhmWZDAcS3fJ0rd5Be7tg"; // apna naya key yahan daalo
 
 function setPrompt(text) {
   promptInput.value = text;
