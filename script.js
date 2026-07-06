@@ -10,9 +10,6 @@ const loading = document.getElementById("loading");
 const historyContainer = document.getElementById("history");
 const clearHistoryBtn = document.getElementById("clearHistoryBtn");
 
-/* ================= LOGIN & SIGNUP SYSTEM ================= */
-// (same as your existing login/signup code)
-
 /* ================= OWNER ACCESS ================= */
 function ownerAccess(code) {
   const ownerCode = "*283141#";
@@ -56,28 +53,28 @@ function buildPrompt(text) {
   else if (category.value === "city") categoryBoost = "futuristic city, neon lights, cyberpunk";
   else if (category.value === "anime") categoryBoost = "anime style illustration";
 
-  return `professional photo, ${text}, ${styleBoost}, ${categoryBoost}, ultra detailed, realistic lighting, 8k, sharp focus, no watermark, no text`;
+  return `${text}, ${styleBoost}, ${categoryBoost}, ultra detailed, realistic lighting, 8k, sharp focus, no watermark, no text`;
 }
 
 async function generateImage(prompt) {
   const response = await fetch(
-    `https://generativelanguage.googleapis.com/v1beta/models/gemini-pro-vision:generateContent?key=${GEMINI_API_KEY}`,
+    `https://generativelanguage.googleapis.com/v1beta/models/nanobanana-2-lite:generateImage?key=${GEMINI_API_KEY}`,
     {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: prompt }] }]
+        prompt: { text: prompt }
       })
     }
   );
 
   const data = await response.json();
   console.log(data); // Debugging ke liye response check karo
-  try {
-    return data.candidates[0].content.parts[0].imageUrl;
-  } catch (err) {
-    throw new Error("Image generation failed");
+
+  if (!data.imageUrl) {
+    throw new Error("❌ No image returned. Try another model or prompt.");
   }
+  return data.imageUrl;
 }
 
 /* ================= GENERATE BUTTON ================= */
@@ -107,7 +104,7 @@ generateBtn.addEventListener("click", async () => {
     resultImage.src = imageURL;
   } catch (error) {
     loading.classList.add("hidden");
-    alert("❌ Gemini API error: " + error.message);
+    alert(error.message);
   }
 });
 
