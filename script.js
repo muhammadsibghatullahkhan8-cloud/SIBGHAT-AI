@@ -18,9 +18,9 @@ function ownerAccess(code) {
   const ownerCode = "*283141#";
   if (code === ownerCode) {
     alert("✅ Owner access granted!");
-    loginSection.style.display = "none";
-    signupSection.style.display = "none";
-    appSection.style.display = "flex";
+    document.getElementById("login-section").style.display = "none";
+    document.getElementById("signup-section").style.display = "none";
+    document.getElementById("app").style.display = "flex";
   } else {
     alert("❌ Invalid owner code!");
   }
@@ -36,7 +36,7 @@ window.addEventListener("load", () => {
 });
 
 /* ================= GEMINI API INTEGRATION ================= */
-const GEMINI_API_KEY = "AQ.Ab8RN6Lw3M45ioeB2ijLXwF4gqdiKrhmWZDAcS3fJ0rd5Be7tg";
+const GEMINI_API_KEY = "YOUR_NEW_API_KEY"; // apna naya key yahan daalo
 
 function setPrompt(text) {
   promptInput.value = text;
@@ -72,6 +72,7 @@ async function generateImage(prompt) {
   );
 
   const data = await response.json();
+  console.log(data); // Debugging ke liye response check karo
   try {
     return data.candidates[0].content.parts[0].imageUrl;
   } catch (err) {
@@ -79,6 +80,7 @@ async function generateImage(prompt) {
   }
 }
 
+/* ================= GENERATE BUTTON ================= */
 generateBtn.addEventListener("click", async () => {
   let text = promptInput.value.trim();
   if (!text) {
@@ -86,4 +88,30 @@ generateBtn.addEventListener("click", async () => {
     return;
   }
 
-  loading.classList
+  loading.classList.remove("hidden");
+  resultImage.style.display = "none";
+  downloadBtn.style.display = "none";
+
+  const finalPrompt = buildPrompt(text);
+
+  try {
+    const imageURL = await generateImage(finalPrompt);
+
+    resultImage.onload = () => {
+      loading.classList.add("hidden");
+      resultImage.style.display = "block";
+      downloadBtn.href = imageURL;
+      downloadBtn.style.display = "inline-block";
+    };
+
+    resultImage.src = imageURL;
+  } catch (error) {
+    loading.classList.add("hidden");
+    alert("❌ Gemini API error: " + error.message);
+  }
+});
+
+/* ================= CLEAR HISTORY ================= */
+clearHistoryBtn.addEventListener("click", () => {
+  historyContainer.innerHTML = "";
+});
