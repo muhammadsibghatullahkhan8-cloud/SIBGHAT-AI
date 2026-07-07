@@ -1,70 +1,211 @@
+```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SIBGHAT AI - Professional</title>
+
+  <title>SIBGHAT AI - AI Image Generator</title>
+
+  <link rel="icon" type="image/png" href="logo.png">
+
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="style.css" />
+
+  <link rel="stylesheet" href="style.css">
 </head>
-<body class="theme-dark">
 
-  <section id="splash-screen">
-    <h1 class="splash-title">SIBGHAT <span>AI</span></h1>
-    <p class="splash-subtitle">✨ Turning imagination into reality...</p>
-  </section>
+<body>
 
-  <section id="owner-section">
-    <h2>🔒 Owner Access</h2>
-    <form onsubmit="event.preventDefault(); ownerAccess(document.getElementById('ownerCode').value);">
-      <input type="text" id="ownerCode" placeholder="Enter owner code..." required />
-      <button type="submit">Access</button>
-    </form>
-  </section>
+<!-- Splash Screen -->
+<div id="splash-screen">
+  <img src="logo.png" class="splash-logo" alt="SIBGHAT AI">
+  <h1>SIBGHAT <span>AI</span></h1>
+  <p>Turning imagination into reality ✨</p>
+</div>
 
-  <div id="app" style="display:none;">
-    <aside id="sidebar">
-      <h2>⚡ History</h2>
-      <button id="clearHistoryBtn">Clear History</button>
-      <div id="history"></div>
-    </aside>
 
-    <main class="container">
-      <header class="branding">
-        <h1 class="logo">SIBGHAT <span>AI</span></h1>
-      </header>
+<!-- Login -->
+<section id="login-section">
 
-      <section class="prompt-section">
-        <textarea id="prompt" placeholder="Describe your image..."></textarea>
-      </section>
+<h2>🔐 Login</h2>
 
-      <section class="options">
-        <select id="category">
-          <option value="">No Category</option>
-          <option value="car">Car 🚗</option>
-          <option value="space">Space 🌌</option>
-          <option value="natural">Natural 🌿</option>
-          <option value="city">City 🏙️</option>
-        </select>
-        <select id="style">
-          <option>Default</option>
-          <option>Realistic</option>
-          <option>Anime</option>
-          <option>Cinematic</option>
-        </select>
-      </section>
+<input id="username" placeholder="Username">
+<input id="password" type="password" placeholder="Password">
 
-      <button id="generateBtn">✨ Generate Image</button>
-      
-      <div id="loading" class="hidden">⏳ AI is thinking...</div>
-      
-      <section id="imageContainer">
-        <img id="resultImage" alt="Generated Image" />
-        <a id="downloadBtn" class="hidden" download>Download Image</a>
-      </section>
-    </main>
-  </div>
+<button onclick="login()">Login</button>
 
-  <script src="script.js"></script>
+<p>
+Don't have account?
+<a href="#" onclick="showSignup()">Signup</a>
+</p>
+
+</section>
+
+
+<!-- Signup -->
+
+<section id="signup-section" style="display:none;">
+
+<h2>📝 Signup</h2>
+
+<input id="newUsername" placeholder="Username">
+
+<input id="newPassword" type="password" placeholder="Password">
+
+<button onclick="signup()">Create Account</button>
+
+<p>
+Already have account?
+<a href="#" onclick="showLogin()">Login</a>
+</p>
+
+</section>
+
+
+
+<!-- Owner Access -->
+
+<section id="owner-section">
+
+<h2>👑 Owner Access</h2>
+
+<input id="ownerCode" placeholder="Owner Code">
+
+<button onclick="ownerAccess(document.getElementById('ownerCode').value)">
+Access
+</button>
+
+</section>
+
+
+
+<!-- MAIN APP -->
+
+<div id="app" style="display:none;">
+
+
+<aside id="sidebar">
+
+<h2>⚡ History</h2>
+
+<button id="clearHistoryBtn">
+Clear
+</button>
+
+<div id="history"></div>
+
+</aside>
+
+
+
+<main class="container">
+
+
+<header>
+
+<img src="logo.png" class="logo-img">
+
+<h1>
+SIBGHAT <span>AI</span>
+</h1>
+
+<p>
+Describe your imagination and AI will create it.
+</p>
+
+</header>
+
+
+
+<textarea 
+id="prompt"
+placeholder="Describe your image..."
+></textarea>
+
+
+
+<div id="suggestions">
+
+<button onclick="setPrompt('A futuristic city with neon lights')">
+City
+</button>
+
+<button onclick="setPrompt('A realistic lion in jungle cinematic style')">
+Lion
+</button>
+
+<button onclick="setPrompt('A cyberpunk robot warrior')">
+Robot
+</button>
+
+</div>
+
+
+
+<div class="options">
+
+
+<select id="style">
+
+<option>Default</option>
+<option>Realistic</option>
+<option>Cinematic</option>
+<option>Anime</option>
+
+</select>
+
+
+
+<select id="category">
+
+<option value="">Category</option>
+<option value="car">Car</option>
+<option value="space">Space</option>
+<option value="nature">Nature</option>
+<option value="city">City</option>
+
+</select>
+
+
+</div>
+
+
+
+<button id="generateBtn">
+
+✨ Generate Image
+
+</button>
+
+
+
+<div id="loading" class="hidden">
+
+⏳ AI is creating...
+
+</div>
+
+
+
+<div id="imageContainer">
+
+<img id="resultImage">
+
+<a id="downloadBtn" class="hidden">
+Download Image
+</a>
+
+</div>
+
+
+</main>
+
+</div>
+
+
+
+<script src="script.js"></script>
+
 </body>
 </html>
+```
