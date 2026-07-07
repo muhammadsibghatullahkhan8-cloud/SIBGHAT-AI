@@ -1,35 +1,40 @@
-```html
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <title>SIBGHAT AI - AI Image Generator</title>
+<title>SIBGHAT AI - AI Image Generator</title>
 
-  <link rel="icon" type="image/png" href="logo.png">
+<link rel="icon" type="image/png" href="logo.png">
 
-  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="style.css">
+<link rel="stylesheet" href="style.css">
+
 </head>
 
 <body>
 
-<!-- Splash Screen -->
+
 <div id="splash-screen">
-  <img src="logo.png" class="splash-logo" alt="SIBGHAT AI">
-  <h1>SIBGHAT <span>AI</span></h1>
-  <p>Turning imagination into reality ✨</p>
+
+<img src="logo.png" class="splash-logo">
+
+<h1>SIBGHAT <span>AI</span></h1>
+
+<p>Turning imagination into reality ✨</p>
+
 </div>
 
 
-<!-- Login -->
+
 <section id="login-section">
 
 <h2>🔐 Login</h2>
 
 <input id="username" placeholder="Username">
+
 <input id="password" type="password" placeholder="Password">
 
 <button onclick="login()">Login</button>
@@ -42,7 +47,7 @@ Don't have account?
 </section>
 
 
-<!-- Signup -->
+
 
 <section id="signup-section" style="display:none;">
 
@@ -63,7 +68,7 @@ Already have account?
 
 
 
-<!-- Owner Access -->
+
 
 <section id="owner-section">
 
@@ -79,22 +84,52 @@ Access
 
 
 
-<!-- MAIN APP -->
+
+
 
 <div id="app" style="display:none;">
 
 
+
 <aside id="sidebar">
 
-<h2>⚡ History</h2>
+
+<h2>
+⚡ History
+</h2>
+
+
+<button id="themeBtn">
+🌙 Theme
+</button>
+
 
 <button id="clearHistoryBtn">
 Clear
 </button>
 
+
+<h3>
+🔥 Generated:
+<span id="counter">
+0
+</span>
+</h3>
+
+
 <div id="history"></div>
 
+
+<h2>
+❤️ Favorites
+</h2>
+
+<div id="favorites"></div>
+
+
 </aside>
+
+
 
 
 
@@ -109,11 +144,15 @@ Clear
 SIBGHAT <span>AI</span>
 </h1>
 
+
 <p>
 Describe your imagination and AI will create it.
 </p>
 
+
 </header>
+
+
 
 
 
@@ -124,21 +163,36 @@ placeholder="Describe your image..."
 
 
 
+
+
 <div id="suggestions">
 
+
 <button onclick="setPrompt('A futuristic city with neon lights')">
-City
+🏙️ City
 </button>
+
 
 <button onclick="setPrompt('A realistic lion in jungle cinematic style')">
-Lion
+🦁 Lion
 </button>
+
 
 <button onclick="setPrompt('A cyberpunk robot warrior')">
-Robot
+🤖 Robot
 </button>
 
+
+<button onclick="setPrompt('A realistic luxury car in cinematic style')">
+🚗 Car
+</button>
+
+
 </div>
+
+
+
+
 
 
 
@@ -148,26 +202,49 @@ Robot
 <select id="style">
 
 <option>Default</option>
+
 <option>Realistic</option>
+
 <option>Cinematic</option>
+
 <option>Anime</option>
 
 </select>
 
 
 
+
 <select id="category">
 
-<option value="">Category</option>
-<option value="car">Car</option>
-<option value="space">Space</option>
-<option value="nature">Nature</option>
-<option value="city">City</option>
+<option value="">
+Category
+</option>
+
+<option value="car">
+Car
+</option>
+
+<option value="space">
+Space
+</option>
+
+<option value="nature">
+Nature
+</option>
+
+<option value="city">
+City
+</option>
+
 
 </select>
 
 
 </div>
+
+
+
+
 
 
 
@@ -179,33 +256,67 @@ Robot
 
 
 
+
+
+
 <div id="loading" class="hidden">
 
+<p id="loadingText">
 ⏳ AI is creating...
+</p>
 
 </div>
+
+
+
 
 
 
 <div id="imageContainer">
 
+
 <img id="resultImage">
+
+
+
+<div id="imageActions">
+
+
+<button id="favoriteBtn" class="hidden">
+❤️ Favorite
+</button>
+
+
+<button id="shareBtn" class="hidden">
+🔗 Share
+</button>
+
+
+</div>
+
+
 
 <a id="downloadBtn" class="hidden">
 Download Image
 </a>
 
+
+
 </div>
+
+
 
 
 </main>
 
+
 </div>
+
 
 
 
 <script src="script.js"></script>
 
 </body>
+
 </html>
-```
