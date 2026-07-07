@@ -1,24 +1,422 @@
-/* Zaroori Fixes */
-.hidden { 
-    display: none !important; 
+```css
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Inter',sans-serif;
 }
 
-#resultImage {
-    max-width: 100%;
-    border-radius: 12px;
-    margin-top: 20px;
-    display: none; /* Default hidden */
+
+body{
+
+    min-height:100vh;
+    background:
+    radial-gradient(circle at top,#202060,#050510 50%);
+
+    color:white;
+
 }
 
-#loading {
-    margin: 20px 0;
-    color: #00e5ff;
-    font-weight: bold;
+
+/* ================= SPLASH ================= */
+
+
+#splash-screen{
+
+    position:fixed;
+    top:0;
+    left:0;
+    width:100%;
+    height:100vh;
+
+    background:#050510;
+
+    display:flex;
+    flex-direction:column;
+    justify-content:center;
+    align-items:center;
+
+    z-index:999;
+
+    transition:.6s;
+
 }
 
-#history {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    padding: 10px;
+
+.splash-logo{
+
+    width:120px;
+    animation:pulse 2s infinite;
+
 }
+
+
+#splash-screen h1{
+
+    margin-top:20px;
+    font-size:45px;
+    font-family:'Orbitron';
+
+}
+
+
+#splash-screen span,
+header span{
+
+    color:#00eaff;
+
+}
+
+
+#splash-screen p{
+
+    margin-top:10px;
+    color:#aaa;
+
+}
+
+
+
+@keyframes pulse{
+
+50%{
+transform:scale(1.1);
+}
+
+}
+
+
+
+/* ================= LOGIN ================= */
+
+
+#login-section,
+#signup-section,
+#owner-section{
+
+    width:350px;
+
+    margin:80px auto;
+
+    padding:30px;
+
+    background:rgba(255,255,255,.08);
+
+    border-radius:20px;
+
+    backdrop-filter:blur(15px);
+
+    box-shadow:0 0 30px rgba(0,200,255,.2);
+
+}
+
+
+input,
+textarea,
+select{
+
+    width:100%;
+
+    padding:14px;
+
+    margin:10px 0;
+
+    border-radius:12px;
+
+    border:none;
+
+    outline:none;
+
+    background:#11152b;
+
+    color:white;
+
+}
+
+
+
+button{
+
+    padding:12px 22px;
+
+    border:none;
+
+    border-radius:12px;
+
+    cursor:pointer;
+
+    background:linear-gradient(45deg,#0077ff,#00eaff);
+
+    color:white;
+
+    font-weight:bold;
+
+    transition:.3s;
+
+}
+
+
+button:hover{
+
+    transform:translateY(-3px);
+
+    box-shadow:0 0 20px #00eaff;
+
+}
+
+
+
+/* ================= APP ================= */
+
+
+#app{
+
+    display:flex;
+
+    min-height:100vh;
+
+}
+
+
+
+/* ================= SIDEBAR ================= */
+
+
+#sidebar{
+
+    width:260px;
+
+    padding:25px;
+
+    background:rgba(0,0,0,.35);
+
+    border-right:1px solid #333;
+
+}
+
+
+#history p{
+
+    margin-top:10px;
+
+    color:#bbb;
+
+    font-size:14px;
+
+}
+
+
+
+/* ================= MAIN ================= */
+
+
+.container{
+
+    flex:1;
+
+    padding:40px;
+
+    text-align:center;
+
+}
+
+
+
+.logo-img{
+
+    width:90px;
+
+}
+
+
+
+header h1{
+
+    font-family:'Orbitron';
+
+    font-size:45px;
+
+}
+
+
+header p{
+
+    color:#aaa;
+
+    margin:10px;
+
+}
+
+
+
+/* ================= PROMPT ================= */
+
+
+textarea{
+
+    height:140px;
+
+    resize:none;
+
+    font-size:16px;
+
+}
+
+
+
+#suggestions button{
+
+    margin:5px;
+
+    background:#151a38;
+
+}
+
+
+
+/* ================= OPTIONS ================= */
+
+
+.options{
+
+    display:flex;
+
+    gap:15px;
+
+    justify-content:center;
+
+}
+
+
+
+.options select{
+
+    width:180px;
+
+}
+
+
+
+/* ================= GENERATE ================= */
+
+
+#generateBtn{
+
+    margin-top:20px;
+
+    font-size:18px;
+
+    padding:15px 35px;
+
+}
+
+
+
+/* ================= LOADING ================= */
+
+
+.hidden{
+
+    display:none;
+
+}
+
+
+#loading{
+
+    margin:25px;
+
+    font-size:20px;
+
+    color:#00eaff;
+
+}
+
+
+
+/* ================= IMAGE ================= */
+
+
+#imageContainer{
+
+    margin-top:30px;
+
+}
+
+
+
+#resultImage{
+
+    max-width:90%;
+
+    border-radius:20px;
+
+    box-shadow:0 0 30px rgba(0,234,255,.4);
+
+}
+
+
+
+#downloadBtn{
+
+    display:inline-block;
+
+    margin-top:20px;
+
+    padding:12px 25px;
+
+    background:#00c853;
+
+    color:white;
+
+    border-radius:12px;
+
+    text-decoration:none;
+
+}
+
+
+
+/* ================= MOBILE ================= */
+
+
+@media(max-width:800px){
+
+
+#app{
+
+    flex-direction:column;
+
+}
+
+
+#sidebar{
+
+    width:100%;
+
+}
+
+
+.container{
+
+    padding:20px;
+
+}
+
+
+header h1{
+
+    font-size:32px;
+
+}
+
+
+.options{
+
+    flex-direction:column;
+
+}
+
+
+}
+```
