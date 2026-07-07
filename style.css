@@ -1,9 +1,5 @@
 /* Reset & Base */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+* { margin: 0; padding: 0; box-sizing: border-box; }
 body {
   font-family: 'Inter', sans-serif;
   background: #0f172a;
@@ -15,8 +11,7 @@ body {
 
 /* Splash Screen */
 #splash-screen {
-  position: fixed;
-  top: 0; left: 0;
+  position: fixed; top: 0; left: 0;
   width: 100%; height: 100vh;
   background: radial-gradient(circle at center, #020617, #0f172a);
   display: flex; flex-direction: column;
@@ -24,237 +19,17 @@ body {
   z-index: 9999;
   transition: opacity 0.6s ease;
 }
-.splash-logo {
-  width: 140px;
-  border-radius: 20px;
-  box-shadow: 0 0 40px rgba(0,229,255,.5);
-  animation: pop 1s ease-in-out;
-}
-.splash-title {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 32px;
-  margin-top: 15px;
-  color: #00e5ff;
-  text-shadow: 0 0 15px rgba(0,229,255,.7);
-}
-.splash-title span {
-  color: #3b82f6;
-}
-.splash-subtitle {
-  margin-top: 10px;
-  color: #cbd5e1;
-  font-size: 16px;
-}
-@keyframes pop {
-  from { transform: scale(0.5); opacity: 0; }
-  to { transform: scale(1); opacity: 1; }
-}
+.splash-logo { width: 140px; border-radius: 20px; box-shadow: 0 0 40px rgba(0,229,255,.5); }
+.splash-title { font-family: 'Orbitron', sans-serif; font-size: 32px; margin-top: 15px; color: #00e5ff; text-shadow: 0 0 15px rgba(0,229,255,.7); }
+.splash-title span { color: #3b82f6; }
+.splash-subtitle { margin-top: 10px; color: #cbd5e1; font-size: 16px; }
 
-/* Auth Sections */
-#login-section, #signup-section, #owner-section {
-  max-width: 400px;
-  margin: 40px auto;
-  background: rgba(15,23,42,0.85);
-  backdrop-filter: blur(12px);
-  padding: 30px;
-  border-radius: 16px;
-  box-shadow: 0 0 25px rgba(0,229,255,.3);
-  text-align: center;
+/* Owner Section */
+#owner-section {
+  max-width: 400px; margin: 40px auto;
+  background: rgba(15,23,42,0.85); backdrop-filter: blur(12px);
+  padding: 30px; border-radius: 16px;
+  box-shadow: 0 0 25px rgba(0,229,255,.3); text-align: center;
 }
-#login-section h2, #signup-section h2, #owner-section h2 {
-  font-family: 'Orbitron', sans-serif;
-  color: #00e5ff;
-  margin-bottom: 20px;
-  text-shadow: 0 0 10px rgba(0,229,255,.7);
-}
-#login-section label, #signup-section label {
-  display: block;
-  margin: 10px 0 5px;
-  text-align: left;
-  color: #cbd5e1;
-}
-#login-section input, #signup-section input, #owner-section input {
-  width: 100%;
-  padding: 12px;
-  border-radius: 10px;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.05);
-  color: #fff;
-  margin-bottom: 15px;
-  transition: border 0.3s ease;
-}
-#login-section input:focus, #signup-section input:focus, #owner-section input:focus {
-  border: 1px solid #00e5ff;
-  outline: none;
-  box-shadow: 0 0 10px rgba(0,229,255,.6);
-}
-#login-section button, #signup-section button, #owner-section button {
-  width: 100%;
-  padding: 12px;
-  background: linear-gradient(90deg,#00e5ff,#3b82f6);
-  border: none;
-  border-radius: 12px;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-#login-section button:hover, #signup-section button:hover, #owner-section button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(0,229,255,.7);
-}
-#loginMessage, #signupMessage {
-  margin-top: 10px;
-  font-weight: bold;
-}
-#loginMessage.success, #signupMessage.success {
-  color: #4ade80;
-  text-shadow: 0 0 10px rgba(74,222,128,.7);
-}
-#loginMessage.error, #signupMessage.error {
-  color: #f87171;
-  text-shadow: 0 0 10px rgba(248,113,113,.7);
-}
-
-/* Layout */
-#app {
-  display: flex;
-  flex: 1;
-  min-height: 100vh;
-}
-
-/* Sidebar */
-#sidebar {
-  width: 260px;
-  background: rgba(15,23,42,0.7);
-  backdrop-filter: blur(12px);
-  border-right: 1px solid rgba(255,255,255,0.1);
-  padding: 20px;
-}
-#sidebar h2 {
-  font-family: 'Orbitron', sans-serif;
-  color: #00e5ff;
-  margin-bottom: 10px;
-}
-#clearHistoryBtn {
-  background: linear-gradient(90deg,#00e5ff,#3b82f6);
-  border: none;
-  padding: 10px 20px;
-  border-radius: 10px;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.3s;
-}
-#clearHistoryBtn:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 15px rgba(0,229,255,.6);
-}
-
-/* Container */
-.container {
-  flex: 1;
-  padding: 40px 20px;
-  text-align: center;
-  background: rgba(30,41,59,0.6);
-  backdrop-filter: blur(12px);
-  border-radius: 20px;
-  margin: 20px;
-  box-shadow: 0 0 30px rgba(0,229,255,.2);
-}
-
-/* Branding */
-.logo-img {
-  width: 90px;
-  border-radius: 12px;
-  margin-bottom: 10px;
-}
-.logo {
-  font-family: 'Orbitron', sans-serif;
-  font-size: 42px;
-  font-weight: 700;
-  color: #fff;
-  text-shadow: 0 0 20px rgba(0,229,255,.7);
-}
-.logo span {
-  color: #00e5ff;
-}
-.subtitle {
-  margin-top: 10px;
-  margin-bottom: 30px;
-  color: #cbd5e1;
-}
-
-/* Inputs */
-textarea, select {
-  width: 80%;
-  max-width: 500px;
-  padding: 14px;
-  margin: 8px 0;
-  border-radius: 12px;
-  border: 1px solid rgba(255,255,255,0.1);
-  background: rgba(255,255,255,0.05);
-  color: #fff;
-  font-size: 16px;
-  transition: border 0.3s ease;
-}
-textarea:focus, select:focus {
-  border: 1px solid #00e5ff;
-  outline: none;
-}
-
-/* Buttons */
-button {
-  background: linear-gradient(90deg,#00e5ff,#3b82f6);
-  border: none;
-  padding: 14px 28px;
-  border-radius: 12px;
-  color: #fff;
-  font-weight: bold;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: transform 0.2s ease, box-shadow 0.3s ease;
-}
-button:hover {
-  transform: scale(1.05);
-  box-shadow: 0 0 20px rgba(0,229,255,.7);
-}
-
-/* Suggestions */
-#suggestions button {
-  margin: 5px;
-  padding: 8px 14px;
-  border-radius: 10px;
-  border: none;
-  cursor: pointer;
-  background: linear-gradient(90deg,#00e5ff,#3b82f6);
-  color: #fff;
-  font-weight: bold;
-  transition: 0.3s;
-}
-#suggestions button:hover {
-  transform: scale(1.08);
-}
-
-/* Loading */
-.hidden { display: none; }
-#loading {
-  margin-top: 15px;
-  color: #00e5ff;
-  font-weight: bold;
-  animation: pulse 1.2s infinite;
-}
-@keyframes pulse {
-  0% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.5; transform: scale(1.02); }
-  100% { opacity: 1; transform: scale(1); }
-}
-
-/* Image */
-#imageContainer {
-  margin-top: 30px;
-  text-align: center;
-}
-#resultImage {
-  max-width: 100%;
-  border
+#owner-section h2 { font-family: 'Orbitron', sans-serif; color: #00e5ff; margin-bottom: 20px; }
+#owner-section input { width: 100%; padding: 12px; border-radius: 10px; border: 1px solid rgba(255,255,255,0.1); background: rgba(255,255,255,0.05); color: #fff; margin-bottom: 15px;
