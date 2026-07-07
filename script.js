@@ -24,6 +24,33 @@ splash.style.display="none";
 
 }
 
+
+// ================= LOAD THEME =================
+
+if(localStorage.getItem("theme")==="light"){
+
+document.body.classList.add("light");
+
+}
+
+
+const themeBtn=document.getElementById("themeBtn");
+
+if(themeBtn){
+
+if(document.body.classList.contains("light")){
+
+themeBtn.innerHTML="☀️ Light";
+
+}else{
+
+themeBtn.innerHTML="🌙 Dark";
+
+}
+
+}
+
+
 loadHistory();
 loadFavorites();
 loadCounter();
@@ -68,6 +95,7 @@ alert("Wrong Code ❌");
 }
 
 }
+
 
 
 
@@ -168,6 +196,7 @@ document.getElementById("signup-section").style.display="block";
 }
 
 
+
 function showLogin(){
 
 document.getElementById("signup-section").style.display="none";
@@ -194,20 +223,54 @@ document.getElementById("prompt").value=text;
 
 // ================= THEME =================
 
+
 const themeBtn =
 document.getElementById("themeBtn");
 
 
 if(themeBtn){
 
+
 themeBtn.onclick=()=>{
+
 
 document.body.classList.toggle("light");
 
 
-};
+
+if(document.body.classList.contains("light")){
+
+
+localStorage.setItem(
+"theme",
+"light"
+);
+
+
+themeBtn.innerHTML="☀️ Light";
+
+
+
+}else{
+
+
+localStorage.setItem(
+"theme",
+"dark"
+);
+
+
+themeBtn.innerHTML="🌙 Dark";
+
 
 }
+
+
+};
+
+
+}
+
 
 
 
@@ -253,7 +316,6 @@ i=0;
 
 }
 
-
 },1000);
 
 
@@ -274,7 +336,7 @@ document.getElementById("loading")
 
 
 
-// ================= GENERATE =================
+// ================= GENERATE IMAGE =================
 
 
 const generateBtn =
@@ -354,6 +416,7 @@ const data =
 await response.json();
 
 
+
 console.log(data);
 
 
@@ -372,7 +435,6 @@ throw new Error(
 );
 
 }
-
 
 
 
@@ -404,6 +466,7 @@ document.getElementById("favoriteBtn")
 .classList.remove("hidden");
 
 
+
 document.getElementById("shareBtn")
 .classList.remove("hidden");
 
@@ -418,9 +481,8 @@ increaseCounter();
 
 
 
-
-
 }
+
 
 catch(error){
 
@@ -447,12 +509,10 @@ alert(
 
 
 
-
 // ================= HISTORY =================
 
 
 function saveHistory(url){
-
 
 let history =
 JSON.parse(
@@ -463,8 +523,7 @@ localStorage.getItem("sibghatHistory")
 history.unshift(url);
 
 
-history =
-history.slice(0,10);
+history=history.slice(0,10);
 
 
 localStorage.setItem(
@@ -475,16 +534,14 @@ JSON.stringify(history)
 
 loadHistory();
 
-
 }
+
 
 
 
 function loadHistory(){
 
-
-let box =
-document.getElementById("history");
+let box=document.getElementById("history");
 
 
 if(!box)return;
@@ -499,11 +556,10 @@ localStorage.getItem("sibghatHistory")
 )||[];
 
 
-
 history.forEach(img=>{
 
 
-box.innerHTML += `
+box.innerHTML+=`
 
 <div class="history-card">
 
@@ -523,11 +579,11 @@ box.innerHTML += `
 
 
 
+
 // ================= FAVORITES =================
 
 
-const favoriteBtn =
-document.getElementById("favoriteBtn");
+const favoriteBtn=document.getElementById("favoriteBtn");
 
 
 if(favoriteBtn){
@@ -535,14 +591,12 @@ if(favoriteBtn){
 favoriteBtn.onclick=()=>{
 
 
-let img =
-document.getElementById("resultImage").src;
+let img=document.getElementById("resultImage").src;
 
 
-let fav =
-JSON.parse(
-localStorage.getItem("favorites")
-)||[];
+let fav=
+JSON.parse(localStorage.getItem("favorites"))
+||[];
 
 
 fav.unshift(img);
@@ -562,16 +616,15 @@ alert("Added to Favorites ❤️");
 
 };
 
-
 }
+
+
 
 
 
 function loadFavorites(){
 
-
-let box =
-document.getElementById("favorites");
+let box=document.getElementById("favorites");
 
 
 if(!box)return;
@@ -580,16 +633,15 @@ if(!box)return;
 box.innerHTML="";
 
 
-let fav =
-JSON.parse(
-localStorage.getItem("favorites")
-)||[];
+let fav=
+JSON.parse(localStorage.getItem("favorites"))
+||[];
 
 
 fav.forEach(img=>{
 
 
-box.innerHTML +=`
+box.innerHTML+=`
 
 <div class="favorite-card">
 
@@ -609,11 +661,11 @@ box.innerHTML +=`
 
 
 
+
 // ================= SHARE =================
 
 
-const shareBtn =
-document.getElementById("shareBtn");
+const shareBtn=document.getElementById("shareBtn");
 
 
 if(shareBtn){
@@ -621,8 +673,7 @@ if(shareBtn){
 shareBtn.onclick=()=>{
 
 
-let url =
-document.getElementById("resultImage").src;
+let url=document.getElementById("resultImage").src;
 
 
 if(navigator.share){
@@ -651,15 +702,15 @@ alert("Share not supported");
 
 
 
+
 // ================= COUNTER =================
 
 
 function increaseCounter(){
 
-let count =
-Number(
-localStorage.getItem("generatedCount")
-)||0;
+let count=
+Number(localStorage.getItem("generatedCount"))
+||0;
 
 
 count++;
@@ -679,13 +730,12 @@ loadCounter();
 
 function loadCounter(){
 
-let counter =
-document.getElementById("counter");
+let counter=document.getElementById("counter");
 
 
 if(counter){
 
-counter.innerText =
+counter.innerText=
 localStorage.getItem("generatedCount")
 ||0;
 
