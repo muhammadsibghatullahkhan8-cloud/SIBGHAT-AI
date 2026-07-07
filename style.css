@@ -1,13 +1,11 @@
-/* ================= SIBGHAT AI V2 CSS ================= */
+/* ================= SIBGHAT AI V2 + VOICE CSS ================= */
 
 
 *{
-
 margin:0;
 padding:0;
 box-sizing:border-box;
 font-family:'Inter',sans-serif;
-
 }
 
 
@@ -26,7 +24,6 @@ color:white;
 transition:.4s;
 
 }
-
 
 
 
@@ -52,7 +49,6 @@ background:white;
 color:#111;
 
 }
-
 
 
 
@@ -153,10 +149,10 @@ border-radius:25px;
 
 backdrop-filter:blur(20px);
 
-box-shadow:
-0 0 40px rgba(0,234,255,.2);
+box-shadow:0 0 40px rgba(0,234,255,.2);
 
 }
+
 
 
 
@@ -189,6 +185,8 @@ color:white;
 
 
 
+
+
 button{
 
 
@@ -203,6 +201,7 @@ cursor:pointer;
 font-weight:bold;
 
 background:
+
 linear-gradient(45deg,#0077ff,#00eaff);
 
 color:white;
@@ -213,13 +212,11 @@ transition:.3s;
 
 
 
-
 button:hover{
 
 transform:scale(1.05);
 
-box-shadow:
-0 0 30px #00eaff;
+box-shadow:0 0 30px #00eaff;
 
 }
 
@@ -275,6 +272,7 @@ overflow:auto;
 
 
 
+
 #sidebar h2{
 
 margin-bottom:20px;
@@ -285,25 +283,23 @@ margin-bottom:20px;
 
 #sidebar h3{
 
-margin:20px 0;
-
 color:#00eaff;
+
+margin:20px 0;
 
 }
 
 
 
 
-
 .credits-box{
+
 
 padding:15px;
 
 border-radius:15px;
 
-background:
-
-rgba(0,234,255,.15);
+background:rgba(0,234,255,.15);
 
 text-align:center;
 
@@ -315,10 +311,9 @@ font-size:20px;
 
 
 
-
-
 #history,
 #favorites{
+
 
 display:flex;
 
@@ -327,8 +322,6 @@ flex-direction:column;
 gap:12px;
 
 }
-
-
 
 
 
@@ -347,8 +340,6 @@ border-radius:15px;
 
 
 
-
-
 .history-card img,
 .favorite-card img{
 
@@ -357,6 +348,7 @@ width:100%;
 border-radius:12px;
 
 }
+
 
 
 
@@ -412,7 +404,6 @@ drop-shadow(0 0 25px #00eaff);
 
 header h1{
 
-
 font-family:'Orbitron';
 
 font-size:50px;
@@ -452,8 +443,6 @@ font-size:16px;
 
 
 
-
-
 #negativePrompt{
 
 height:80px;
@@ -464,10 +453,74 @@ height:80px;
 
 
 
+/* VOICE BUTTON */
+
+
+#voiceBtn{
+
+
+margin:10px;
+
+background:
+
+linear-gradient(45deg,#ff0066,#ff00cc);
+
+font-size:17px;
+
+padding:14px 35px;
+
+animation:voiceGlow 2s infinite;
+
+}
+
+
+
+@keyframes voiceGlow{
+
+
+0%{
+
+box-shadow:0 0 5px #ff00cc;
+
+}
+
+
+50%{
+
+box-shadow:0 0 30px #ff00cc;
+
+}
+
+
+100%{
+
+box-shadow:0 0 5px #ff00cc;
+
+}
+
+
+}
+
+
+
+
+#voiceStatus{
+
+color:#00eaff;
+
+font-size:16px;
+
+margin:10px;
+
+}
+
+
+
+
+
 
 
 #suggestions button{
-
 
 margin:5px;
 
@@ -506,7 +559,6 @@ width:180px;
 
 
 
-
 #generateBtn{
 
 
@@ -517,6 +569,7 @@ font-size:20px;
 padding:16px 40px;
 
 }
+
 
 
 
@@ -535,6 +588,7 @@ display:none!important;
 
 
 
+
 #loading{
 
 margin:30px;
@@ -546,7 +600,6 @@ font-size:20px;
 animation:pulse 1.5s infinite;
 
 }
-
 
 
 
@@ -571,6 +624,7 @@ background:
 rgba(255,255,255,.05);
 
 }
+
 
 
 
@@ -620,6 +674,8 @@ transform:scale(1);
 
 
 
+
+
 #favoriteBtn{
 
 background:#ff4081;
@@ -637,6 +693,7 @@ background:#673ab7;
 margin:8px;
 
 }
+
 
 
 
@@ -670,7 +727,6 @@ text-decoration:none;
 
 #gallery{
 
-
 margin-top:50px;
 
 }
@@ -682,13 +738,12 @@ margin-top:50px;
 
 display:grid;
 
-grid-template-columns:
-
-repeat(auto-fit,minmax(180px,1fr));
+grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
 
 gap:15px;
 
 }
+
 
 
 
@@ -699,12 +754,9 @@ width:100%;
 
 border-radius:20px;
 
-box-shadow:
-
-0 0 20px rgba(0,234,255,.3);
+box-shadow:0 0 20px rgba(0,234,255,.3);
 
 }
-
 
 
 
@@ -771,7 +823,6 @@ flex-direction:column;
 width:90%;
 
 }
-
 
 
 }
