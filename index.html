@@ -4,7 +4,6 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SIBGHAT AI - Professional</title>
-  <link rel="icon" type="image/png" href="logo.png" />
   <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
 </head>
@@ -12,42 +11,13 @@
 
   <!-- Splash Screen -->
   <section id="splash-screen">
-    <img src="logo.png" alt="SIBGHAT AI Logo" class="splash-logo" />
     <h1 class="splash-title">SIBGHAT <span>AI</span></h1>
     <p class="splash-subtitle">✨ Turning imagination into reality...</p>
   </section>
 
-  <!-- Login Section -->
-  <section id="login-section">
-    <h2>🔑 Login</h2>
-    <form id="loginForm">
-      <label for="username">Username</label>
-      <input type="text" id="username" required />
-      <label for="password">Password</label>
-      <input type="password" id="password" required />
-      <button type="submit">Login</button>
-    </form>
-    <p id="loginMessage"></p>
-    <p>Not registered? <a href="#" id="showSignup">Signup here</a></p>
-  </section>
-
-  <!-- Signup Section -->
-  <section id="signup-section" style="display:none;">
-    <h2>📝 Signup</h2>
-    <form id="signupForm">
-      <label for="newUsername">Username</label>
-      <input type="text" id="newUsername" required />
-      <label for="newPassword">Password</label>
-      <input type="password" id="newPassword" required />
-      <button type="submit">Signup</button>
-    </form>
-    <p id="signupMessage"></p>
-    <p>Already have an account? <a href="#" id="showLogin">Login here</a></p>
-  </section>
-
   <!-- Owner Access Section -->
   <section id="owner-section">
-    <h2>🔒 Code For Only AI Owner</h2>
+    <h2>🔒 Owner Access</h2>
     <form onsubmit="event.preventDefault(); ownerAccess(document.getElementById('ownerCode').value);">
       <input type="text" id="ownerCode" placeholder="Enter owner code..." required />
       <button type="submit">Access</button>
@@ -63,7 +33,6 @@
     </aside>
     <main class="container">
       <header class="branding">
-        <img src="logo.png" alt="SIBGHAT AI Logo" class="logo-img" />
         <h1 class="logo">SIBGHAT <span>AI</span></h1>
         <p class="subtitle">Describe your vision, let AI create it</p>
       </header>
@@ -100,14 +69,6 @@
           <option>Realistic</option>
           <option>Anime</option>
           <option>Cinematic</option>
-        </select>
-
-        <label for="theme">Theme</label>
-        <select id="theme" onchange="switchTheme(this.value)">
-          <option value="dark">Dark</option>
-          <option value="light">Light</option>
-          <option value="purple">Purple</option>
-          <option value="green">Green</option>
         </select>
       </section>
 
