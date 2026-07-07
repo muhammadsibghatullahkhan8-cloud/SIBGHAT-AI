@@ -9,13 +9,11 @@
 </head>
 <body class="theme-dark">
 
-  <!-- Splash Screen -->
   <section id="splash-screen">
     <h1 class="splash-title">SIBGHAT <span>AI</span></h1>
     <p class="splash-subtitle">✨ Turning imagination into reality...</p>
   </section>
 
-  <!-- Owner Access Section -->
   <section id="owner-section">
     <h2>🔒 Owner Access</h2>
     <form onsubmit="event.preventDefault(); ownerAccess(document.getElementById('ownerCode').value);">
@@ -24,46 +22,30 @@
     </form>
   </section>
 
-  <!-- Main App -->
   <div id="app" style="display:none;">
     <aside id="sidebar">
       <h2>⚡ History</h2>
       <button id="clearHistoryBtn">Clear History</button>
       <div id="history"></div>
     </aside>
+
     <main class="container">
       <header class="branding">
         <h1 class="logo">SIBGHAT <span>AI</span></h1>
-        <p class="subtitle">Describe your vision, let AI create it</p>
       </header>
 
-      <!-- Prompt Section -->
       <section class="prompt-section">
         <textarea id="prompt" placeholder="Describe your image..."></textarea>
       </section>
 
-      <!-- Suggestions -->
-      <section id="suggestions">
-        <button onclick="setPrompt('A futuristic city at night neon lights')">City</button>
-        <button onclick="setPrompt('A cinematic lion in jungle ultra realistic')">Lion</button>
-        <button onclick="setPrompt('Cyberpunk robot warrior glowing sword')">Robot</button>
-        <button onclick="setPrompt('Beautiful galaxy with stars and planets')">Galaxy</button>
-        <button onclick="setPrompt('Anime girl with glowing sword')">Anime</button>
-      </section>
-
-      <!-- Options -->
       <section class="options">
-        <label for="category">Category</label>
         <select id="category">
           <option value="">No Category</option>
           <option value="car">Car 🚗</option>
           <option value="space">Space 🌌</option>
           <option value="natural">Natural 🌿</option>
           <option value="city">City 🏙️</option>
-          <option value="anime">Anime 🎨</option>
         </select>
-
-        <label for="style">Style</label>
         <select id="style">
           <option>Default</option>
           <option>Realistic</option>
@@ -72,14 +54,13 @@
         </select>
       </section>
 
-      <!-- Generate Button -->
       <button id="generateBtn">✨ Generate Image</button>
+      
       <div id="loading" class="hidden">⏳ AI is thinking...</div>
-
-      <!-- Image Container -->
+      
       <section id="imageContainer">
         <img id="resultImage" alt="Generated Image" />
-        <a id="downloadBtn" class="hidden">Download</a>
+        <a id="downloadBtn" class="hidden" download>Download Image</a>
       </section>
     </main>
   </div>
