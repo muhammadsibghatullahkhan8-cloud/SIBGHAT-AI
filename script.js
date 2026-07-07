@@ -1,7 +1,7 @@
-// ================= SIBGHAT AI V2 SCRIPT =================
+// ================= SIBGHAT AI V2 + VOICE SCRIPT =================
 
 
-// CLOUDFLARE WORKER
+// WORKER URL
 
 const WORKER_URL =
 "https://sibghat-ai.muhammadsibghatullahkhan8.workers.dev";
@@ -9,15 +9,12 @@ const WORKER_URL =
 
 
 
-
 // ================= LOAD =================
-
 
 window.addEventListener("load",()=>{
 
 
-const splash =
-document.getElementById("splash-screen");
+const splash=document.getElementById("splash-screen");
 
 
 if(splash){
@@ -37,7 +34,6 @@ if(localStorage.getItem("theme")==="light"){
 document.body.classList.add("light");
 
 }
-
 
 
 updateThemeButton();
@@ -61,9 +57,7 @@ loadCredits();
 
 
 
-
-
-// ================= APP OPEN =================
+// ================= OPEN APP =================
 
 
 function openAI(){
@@ -80,8 +74,6 @@ document.getElementById("app").style.display="flex";
 
 
 }
-
-
 
 
 
@@ -105,16 +97,13 @@ openAI();
 }else{
 
 
-alert("Wrong Owner Code ❌");
+alert("Wrong Code ❌");
 
 
 }
 
 
 }
-
-
-
 
 
 
@@ -151,7 +140,6 @@ localStorage.setItem(
 JSON.stringify({
 
 username,
-
 password
 
 })
@@ -160,14 +148,13 @@ password
 
 
 
-alert("Account Created ✅");
+alert("Signup Successful ✅");
 
 
 showLogin();
 
 
 }
-
 
 
 
@@ -198,7 +185,7 @@ JSON.parse(localStorage.getItem("sibghatUser"));
 
 if(!user){
 
-alert("Create account first");
+alert("Signup first");
 
 return;
 
@@ -206,18 +193,13 @@ return;
 
 
 
-
-if(
-username===user.username &&
-password===user.password
-
-){
+if(username===user.username &&
+password===user.password){
 
 
 alert("Login Successful ✅");
 
 openAI();
-
 
 
 }else{
@@ -229,10 +211,7 @@ alert("Wrong Login ❌");
 }
 
 
-
 }
-
-
 
 
 
@@ -253,12 +232,132 @@ document.getElementById("signup-section").style.display="block";
 
 
 
-
 function showLogin(){
 
 document.getElementById("signup-section").style.display="none";
 
 document.getElementById("login-section").style.display="block";
+
+}
+
+
+
+
+
+
+
+
+// ================= VOICE PROMPT =================
+
+
+const voiceBtn =
+document.getElementById("voiceBtn");
+
+
+if(voiceBtn){
+
+
+
+voiceBtn.onclick=()=>{
+
+
+let SpeechRecognition =
+window.SpeechRecognition ||
+window.webkitSpeechRecognition;
+
+
+
+if(!SpeechRecognition){
+
+
+alert("Your browser does not support voice input");
+
+
+return;
+
+
+}
+
+
+
+let recognition =
+new SpeechRecognition();
+
+
+
+recognition.lang="en-US";
+
+recognition.continuous=false;
+
+recognition.interimResults=false;
+
+
+
+let status =
+document.getElementById("voiceStatus");
+
+
+
+status.innerHTML="🎙️ Listening...";
+
+
+
+recognition.start();
+
+
+
+
+
+recognition.onresult=(event)=>{
+
+
+let text =
+event.results[0][0].transcript;
+
+
+
+document.getElementById("prompt").value=text;
+
+
+status.innerHTML=
+"✅ Voice converted";
+
+
+};
+
+
+
+
+
+recognition.onerror=()=>{
+
+
+status.innerHTML=
+"❌ Voice error";
+
+
+};
+
+
+
+recognition.onend=()=>{
+
+
+setTimeout(()=>{
+
+
+status.innerHTML="";
+
+
+},3000);
+
+
+};
+
+
+
+};
+
 
 }
 
@@ -294,6 +393,7 @@ const themeBtn =
 document.getElementById("themeBtn");
 
 
+
 if(themeBtn){
 
 
@@ -304,28 +404,24 @@ document.body.classList.toggle("light");
 
 
 
-if(document.body.classList.contains("light")){
+localStorage.setItem(
 
+"theme",
 
-localStorage.setItem("theme","light");
+document.body.classList.contains("light")
+?
+"light"
+:
+"dark"
 
-
-}else{
-
-
-localStorage.setItem("theme","dark");
-
-
-}
+);
 
 
 
 updateThemeButton();
 
 
-
 };
-
 
 
 }
@@ -350,6 +446,7 @@ document.body.classList.contains("light")
 :
 "🌙 Dark";
 
+
 }
 
 
@@ -366,8 +463,7 @@ document.body.classList.contains("light")
 function startLoading(){
 
 
-document
-.getElementById("loading")
+document.getElementById("loading")
 .classList.remove("hidden");
 
 
@@ -380,12 +476,9 @@ document.getElementById("loadingText");
 let steps=[
 
 "✨ Understanding prompt...",
-
-"🎨 Creating details...",
-
+"🎨 Creating image...",
 "⚡ Enhancing quality...",
-
-"🚀 Finalizing image..."
+"🚀 Finishing..."
 
 ];
 
@@ -394,8 +487,7 @@ let steps=[
 let i=0;
 
 
-
-window.loadTimer=setInterval(()=>{
+window.timer=setInterval(()=>{
 
 
 text.innerHTML=steps[i];
@@ -404,12 +496,7 @@ text.innerHTML=steps[i];
 i++;
 
 
-if(i>=steps.length){
-
-i=0;
-
-}
-
+if(i>=steps.length)i=0;
 
 
 },1000);
@@ -425,11 +512,10 @@ i=0;
 function stopLoading(){
 
 
-clearInterval(window.loadTimer);
+clearInterval(window.timer);
 
 
-document
-.getElementById("loading")
+document.getElementById("loading")
 .classList.add("hidden");
 
 
@@ -442,8 +528,7 @@ document
 
 
 
-
-// ================= GENERATE =================
+// ================= GENERATE IMAGE =================
 
 
 const generateBtn =
@@ -474,7 +559,6 @@ return;
 
 
 
-
 let credits =
 Number(localStorage.getItem("credits") || 100);
 
@@ -482,13 +566,11 @@ Number(localStorage.getItem("credits") || 100);
 
 if(credits<=0){
 
-alert("No credits left");
+alert("No credits");
 
 return;
 
 }
-
-
 
 
 
@@ -519,26 +601,20 @@ document.getElementById("negativePrompt").value;
 
 prompt +=
 `
-
-Style: ${style}
-
-Quality: ${quality}
-
-Resolution: ${size}
-
-${negative}
-
-Ultra realistic, detailed, professional photography
-
+${style},
+${quality},
+${size},
+${negative},
+ultra realistic,
+high detail,
+professional photography
 `;
 
 
 
 
 
-
 generateBtn.disabled=true;
-
 
 
 startLoading();
@@ -548,7 +624,6 @@ startLoading();
 try{
 
 
-
 let response =
 await fetch(
 
@@ -556,16 +631,13 @@ WORKER_URL,
 
 {
 
-
 method:"POST",
-
 
 headers:{
 
 "Content-Type":"application/json"
 
 },
-
 
 body:JSON.stringify({
 
@@ -577,8 +649,8 @@ size,
 
 quality
 
-})
 
+})
 
 }
 
@@ -587,12 +659,8 @@ quality
 
 
 
-
-
 let data =
 await response.json();
-
-
 
 
 
@@ -603,15 +671,12 @@ data.url;
 
 
 
-
-
-
 if(!imageURL){
 
-throw Error("No image received");
+throw Error("Image not received");
+
 
 }
-
 
 
 
@@ -634,30 +699,21 @@ stopLoading();
 generateBtn.disabled=false;
 
 
-img.classList.remove("hidden");
+
+document.getElementById("downloadBtn").href=imageURL;
 
 
-
-document
-.getElementById("downloadBtn")
-.href=imageURL;
-
-
-
-document
-.getElementById("downloadBtn")
+document.getElementById("downloadBtn")
 .classList.remove("hidden");
 
 
 
-document
-.getElementById("favoriteBtn")
+document.getElementById("favoriteBtn")
 .classList.remove("hidden");
 
 
 
-document
-.getElementById("shareBtn")
+document.getElementById("shareBtn")
 .classList.remove("hidden");
 
 
@@ -675,16 +731,17 @@ useCredit();
 
 
 
-}catch(e){
+}catch(error){
 
 
 stopLoading();
 
-
 generateBtn.disabled=false;
 
 
-alert("AI Error: "+e.message);
+alert(
+"AI Error: "+error.message
+);
 
 
 }
@@ -704,15 +761,14 @@ alert("AI Error: "+e.message);
 
 
 
-
-// ================= CREDITS =================
+// ================= CREDIT =================
 
 
 function useCredit(){
 
 
 let c =
-Number(localStorage.getItem("credits") || 100);
+Number(localStorage.getItem("credits")||100);
 
 
 c--;
@@ -728,7 +784,6 @@ loadCredits();
 
 
 
-
 function loadCredits(){
 
 
@@ -739,14 +794,12 @@ document.getElementById("credits");
 if(box){
 
 box.innerHTML =
-localStorage.getItem("credits") || 100;
+localStorage.getItem("credits")||100;
 
 }
 
 
 }
-
-
 
 
 
@@ -760,23 +813,22 @@ localStorage.getItem("credits") || 100;
 function saveHistory(url){
 
 
-let arr =
+let h =
 JSON.parse(localStorage.getItem("sibghatHistory"))
 ||[];
 
 
 
-arr.unshift(url);
+h.unshift(url);
 
 
-
-arr=arr.slice(0,10);
+h=h.slice(0,10);
 
 
 
 localStorage.setItem(
 "sibghatHistory",
-JSON.stringify(arr)
+JSON.stringify(h)
 );
 
 
@@ -789,34 +841,37 @@ loadHistory();
 
 
 
-
 function loadHistory(){
 
 
-let box =
-document.getElementById("history");
+let box=document.getElementById("history");
+
 
 if(!box)return;
+
 
 
 box.innerHTML="";
 
 
-let arr =
+
+let h=
 JSON.parse(localStorage.getItem("sibghatHistory"))
 ||[];
 
 
 
+h.forEach(url=>{
 
-arr.forEach(url=>{
 
+box.innerHTML+=`
 
-box.innerHTML +=
-`
 <div class="history-card">
+
 <img src="${url}">
+
 </div>
+
 `;
 
 
@@ -824,8 +879,6 @@ box.innerHTML +=
 
 
 }
-
-
 
 
 
@@ -836,9 +889,8 @@ box.innerHTML +=
 // ================= FAVORITES =================
 
 
-const favoriteBtn =
+let favoriteBtn =
 document.getElementById("favoriteBtn");
-
 
 
 if(favoriteBtn){
@@ -847,31 +899,29 @@ if(favoriteBtn){
 favoriteBtn.onclick=()=>{
 
 
-let url =
+let img =
 document.getElementById("resultImage").src;
 
 
-let fav =
+
+let f =
 JSON.parse(localStorage.getItem("favorites"))
 ||[];
 
 
 
-fav.unshift(url);
+f.unshift(img);
 
 
 
 localStorage.setItem(
 "favorites",
-JSON.stringify(fav)
+JSON.stringify(f)
 );
 
 
 
 loadFavorites();
-
-
-alert("Added ❤️");
 
 
 };
@@ -882,14 +932,10 @@ alert("Added ❤️");
 
 
 
-
-
-
 function loadFavorites(){
 
 
-let box =
-document.getElementById("favorites");
+let box=document.getElementById("favorites");
 
 
 if(!box)return;
@@ -899,22 +945,23 @@ if(!box)return;
 box.innerHTML="";
 
 
-
-let fav =
+let f =
 JSON.parse(localStorage.getItem("favorites"))
 ||[];
 
 
 
+f.forEach(url=>{
 
-fav.forEach(url=>{
 
+box.innerHTML+=`
 
-box.innerHTML+=
-`
 <div class="favorite-card">
+
 <img src="${url}">
+
 </div>
+
 `;
 
 
@@ -922,7 +969,6 @@ box.innerHTML+=
 
 
 }
-
 
 
 
@@ -942,9 +988,7 @@ JSON.parse(localStorage.getItem("gallery"))
 ||[];
 
 
-
 g.unshift(url);
-
 
 
 g=g.slice(0,20);
@@ -966,19 +1010,17 @@ loadGallery();
 
 
 
-
 function loadGallery(){
 
 
-let box =
-document.getElementById("galleryBox");
+let box=document.getElementById("galleryBox");
 
 
 if(!box)return;
 
 
-box.innerHTML="";
 
+box.innerHTML="";
 
 
 let g =
@@ -987,74 +1029,19 @@ JSON.parse(localStorage.getItem("gallery"))
 
 
 
-
 g.forEach(url=>{
 
 
-box.innerHTML+=
-`
+box.innerHTML+=`
+
 <img src="${url}">
+
 `;
 
-
 });
 
 
 }
-
-
-
-
-
-
-
-
-
-// ================= SHARE =================
-
-
-const shareBtn =
-document.getElementById("shareBtn");
-
-
-if(shareBtn){
-
-
-shareBtn.onclick=()=>{
-
-
-let url =
-document.getElementById("resultImage").src;
-
-
-
-if(navigator.share){
-
-
-navigator.share({
-
-title:"SIBGHAT AI",
-
-url:url
-
-});
-
-
-}else{
-
-
-alert("Sharing not supported");
-
-
-}
-
-
-};
-
-
-}
-
-
 
 
 
@@ -1081,7 +1068,6 @@ c
 );
 
 
-
 loadCounter();
 
 
@@ -1093,17 +1079,14 @@ loadCounter();
 function loadCounter(){
 
 
-let c =
-document.getElementById("counter");
+let c=document.getElementById("counter");
 
 
 if(c){
 
-
-c.innerHTML =
+c.innerHTML=
 localStorage.getItem("generatedCount")||0;
 
-
 }
 
 
@@ -1116,12 +1099,58 @@ localStorage.getItem("generatedCount")||0;
 
 
 
+// ================= SHARE =================
 
-// ================= CLEAR =================
+
+let shareBtn =
+document.getElementById("shareBtn");
+
+
+
+if(shareBtn){
+
+
+shareBtn.onclick=()=>{
+
+
+let url =
+document.getElementById("resultImage").src;
+
+
+
+if(navigator.share){
+
+
+navigator.share({
+
+title:"SIBGHAT AI",
+
+url:url
+
+});
+
+
+}
+
+
+};
+
+
+}
+
+
+
+
+
+
+
+
+// ================= CLEAR HISTORY =================
 
 
 let clearBtn =
 document.getElementById("clearHistoryBtn");
+
 
 
 if(clearBtn){
@@ -1130,7 +1159,10 @@ if(clearBtn){
 clearBtn.onclick=()=>{
 
 
-localStorage.removeItem("sibghatHistory");
+localStorage.removeItem(
+"sibghatHistory"
+);
+
 
 
 document.getElementById("history").innerHTML="";
