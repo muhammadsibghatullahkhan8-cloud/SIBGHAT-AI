@@ -59,22 +59,23 @@ async function generateImage() {
 
   const finalPrompt = buildPrompt(text);
 
-  const res = await fetch(`https://source.unsplash.com/800x600/?${encodeURIComponent(finalPrompt)}`);
+  // Direct Unsplash image URL
+  const imageURL = `https://source.unsplash.com/800x600/?${encodeURIComponent(finalPrompt)}`;
 
   resultImage.onload = () => {
     loading.classList.add("hidden");
     resultImage.style.display = "block";
-    downloadBtn.href = res.url;
+    downloadBtn.href = imageURL;
     downloadBtn.download = "sibghat_ai_image.jpg";
     downloadBtn.style.display = "inline-block";
 
     const thumb = document.createElement("img");
-    thumb.src = res.url;
+    thumb.src = imageURL;
     thumb.className = "thumb";
     historyContainer.appendChild(thumb);
   };
 
-  resultImage.src = res.url;
+  resultImage.src = imageURL;
 }
 
 /* ================= GENERATE BUTTON ================= */
