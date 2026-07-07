@@ -1,12 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
+
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>SIBGHAT AI - AI Image Generator</title>
 
-<link rel="icon" type="image/png" href="logo.png">
+<link rel="icon" href="logo.png">
 
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Inter:wght@300;400;600&display=swap" rel="stylesheet">
 
@@ -14,72 +16,111 @@
 
 </head>
 
+
 <body>
 
+
+<!-- SPLASH -->
 
 <div id="splash-screen">
 
 <img src="logo.png" class="splash-logo">
 
-<h1>SIBGHAT <span>AI</span></h1>
+<h1>
+SIBGHAT <span>AI</span>
+</h1>
 
-<p>Turning imagination into reality ✨</p>
+<p>
+Turning imagination into reality ✨
+</p>
 
 </div>
 
 
 
+
+
+<!-- LOGIN -->
+
 <section id="login-section">
 
 <h2>🔐 Login</h2>
 
+
 <input id="username" placeholder="Username">
+
 
 <input id="password" type="password" placeholder="Password">
 
-<button onclick="login()">Login</button>
+
+<button onclick="login()">
+Login
+</button>
+
 
 <p>
 Don't have account?
 <a href="#" onclick="showSignup()">Signup</a>
 </p>
 
+
 </section>
 
 
 
 
+
+<!-- SIGNUP -->
+
 <section id="signup-section" style="display:none;">
+
 
 <h2>📝 Signup</h2>
 
+
 <input id="newUsername" placeholder="Username">
+
 
 <input id="newPassword" type="password" placeholder="Password">
 
-<button onclick="signup()">Create Account</button>
+
+<button onclick="signup()">
+Create Account
+</button>
+
 
 <p>
 Already have account?
 <a href="#" onclick="showLogin()">Login</a>
 </p>
 
+
 </section>
 
 
 
 
 
+
+<!-- OWNER -->
+
+
 <section id="owner-section">
 
-<h2>👑 Owner Access</h2>
+
+<h2>
+👑 Owner Access
+</h2>
+
 
 <input id="ownerCode" placeholder="Owner Code">
+
 
 <button onclick="ownerAccess(document.getElementById('ownerCode').value)">
 Access
 </button>
 
+
 </section>
 
 
@@ -87,8 +128,19 @@ Access
 
 
 
+
+
+<!-- APP -->
+
+
 <div id="app" style="display:none;">
 
+
+
+
+
+
+<!-- SIDEBAR -->
 
 
 <aside id="sidebar">
@@ -109,6 +161,7 @@ Clear
 </button>
 
 
+
 <h3>
 🔥 Generated:
 <span id="counter">
@@ -117,14 +170,39 @@ Clear
 </h3>
 
 
+
 <div id="history"></div>
+
+
+
 
 
 <h2>
 ❤️ Favorites
 </h2>
 
+
 <div id="favorites"></div>
+
+
+
+
+
+<h2>
+💎 Credits
+</h2>
+
+
+<div class="credits-box">
+
+<span id="credits">
+100
+</span>
+
+Free Credits
+
+</div>
+
 
 
 </aside>
@@ -133,12 +211,22 @@ Clear
 
 
 
+
+
+
+
+<!-- MAIN -->
+
+
 <main class="container">
+
 
 
 <header>
 
+
 <img src="logo.png" class="logo-img">
+
 
 <h1>
 SIBGHAT <span>AI</span>
@@ -146,7 +234,7 @@ SIBGHAT <span>AI</span>
 
 
 <p>
-Describe your imagination and AI will create it.
+Create stunning AI images from your imagination.
 </p>
 
 
@@ -156,10 +244,28 @@ Describe your imagination and AI will create it.
 
 
 
+
+
+
 <textarea 
 id="prompt"
-placeholder="Describe your image..."
+placeholder="Describe your imagination..."
 ></textarea>
+
+
+
+
+
+
+
+<textarea
+id="negativePrompt"
+placeholder="Negative prompt (example: blurry, low quality, distorted face)"
+></textarea>
+
+
+
+
 
 
 
@@ -183,7 +289,7 @@ placeholder="Describe your image..."
 </button>
 
 
-<button onclick="setPrompt('A realistic luxury car in cinematic style')">
+<button onclick="setPrompt('A luxury sports car cinematic photo')">
 🚗 Car
 </button>
 
@@ -196,41 +302,92 @@ placeholder="Describe your image..."
 
 
 
+
+
 <div class="options">
 
 
-<select id="style">
 
-<option>Default</option>
+<select id="model">
 
-<option>Realistic</option>
 
-<option>Cinematic</option>
+<option value="flux">
+FLUX AI
+</option>
 
-<option>Anime</option>
+
+<option value="sdxl">
+Stable Diffusion XL
+</option>
+
+
+<option value="anime">
+Anime AI
+</option>
+
 
 </select>
 
 
 
 
+
+
+
+<select id="style">
+
+
+<option>
+Default
+</option>
+
+
+<option>
+Realistic
+</option>
+
+
+<option>
+Cinematic
+</option>
+
+
+<option>
+Anime
+</option>
+
+
+</select>
+
+
+
+
+
+
+
+
 <select id="category">
+
 
 <option value="">
 Category
 </option>
 
+
 <option value="car">
 Car
 </option>
+
 
 <option value="space">
 Space
 </option>
 
+
 <option value="nature">
 Nature
 </option>
+
 
 <option value="city">
 City
@@ -240,7 +397,66 @@ City
 </select>
 
 
+
+
+
+
+<select id="size">
+
+
+<option>
+1024x1024
+</option>
+
+
+<option>
+1536x1536
+</option>
+
+
+<option>
+16:9
+</option>
+
+
+<option>
+9:16
+</option>
+
+
+</select>
+
+
+
+
+
+
+
+<select id="quality">
+
+
+<option>
+Fast
+</option>
+
+
+<option>
+HD
+</option>
+
+
+<option>
+Ultra
+</option>
+
+
+</select>
+
+
+
 </div>
+
+
 
 
 
@@ -250,7 +466,7 @@ City
 
 <button id="generateBtn">
 
-✨ Generate Image
+✨ Generate AI Image
 
 </button>
 
@@ -259,13 +475,23 @@ City
 
 
 
+
+
+
 <div id="loading" class="hidden">
 
+
 <p id="loadingText">
+
 ⏳ AI is creating...
+
 </p>
 
+
 </div>
+
+
+
 
 
 
@@ -275,7 +501,10 @@ City
 <div id="imageContainer">
 
 
+
 <img id="resultImage">
+
+
 
 
 
@@ -283,12 +512,17 @@ City
 
 
 <button id="favoriteBtn" class="hidden">
+
 ❤️ Favorite
+
 </button>
 
 
+
 <button id="shareBtn" class="hidden">
+
 🔗 Share
+
 </button>
 
 
@@ -296,13 +530,44 @@ City
 
 
 
+
+
 <a id="downloadBtn" class="hidden">
+
 Download Image
+
 </a>
 
 
 
 </div>
+
+
+
+
+
+
+
+
+
+<!-- GALLERY -->
+
+
+<section id="gallery">
+
+
+<h2>
+🖼️ My Creations
+</h2>
+
+
+<div id="galleryBox"></div>
+
+
+</section>
+
+
+
 
 
 
@@ -315,7 +580,11 @@ Download Image
 
 
 
+
+
+
 <script src="script.js"></script>
+
 
 </body>
 
