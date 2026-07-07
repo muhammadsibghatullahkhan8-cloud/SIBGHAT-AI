@@ -1,18 +1,24 @@
-// ================= SIBGHAT AI SCRIPT =================
+// ================= SIBGHAT AI V2 SCRIPT =================
 
 
-// Worker URL
+// CLOUDFLARE WORKER
 
 const WORKER_URL =
 "https://sibghat-ai.muhammadsibghatullahkhan8.workers.dev";
 
 
 
-// ================= SPLASH =================
+
+
+// ================= LOAD =================
+
 
 window.addEventListener("load",()=>{
 
-const splash=document.getElementById("splash-screen");
+
+const splash =
+document.getElementById("splash-screen");
+
 
 if(splash){
 
@@ -25,7 +31,6 @@ splash.style.display="none";
 }
 
 
-// ================= LOAD THEME =================
 
 if(localStorage.getItem("theme")==="light"){
 
@@ -34,35 +39,35 @@ document.body.classList.add("light");
 }
 
 
-const themeBtn=document.getElementById("themeBtn");
 
-if(themeBtn){
-
-if(document.body.classList.contains("light")){
-
-themeBtn.innerHTML="☀️ Light";
-
-}else{
-
-themeBtn.innerHTML="🌙 Dark";
-
-}
-
-}
+updateThemeButton();
 
 
 loadHistory();
+
 loadFavorites();
+
+loadGallery();
+
 loadCounter();
+
+loadCredits();
+
 
 });
 
 
 
 
-// ================= OPEN APP =================
+
+
+
+
+// ================= APP OPEN =================
+
 
 function openAI(){
+
 
 document.getElementById("login-section").style.display="none";
 
@@ -70,9 +75,14 @@ document.getElementById("signup-section").style.display="none";
 
 document.getElementById("owner-section").style.display="none";
 
+
 document.getElementById("app").style.display="flex";
 
+
 }
+
+
+
 
 
 
@@ -80,21 +90,32 @@ document.getElementById("app").style.display="flex";
 
 // ================= OWNER =================
 
+
 function ownerAccess(code){
 
+
 if(code==="*283141#"){
+
 
 alert("Owner Access Granted ✅");
 
 openAI();
 
+
 }else{
 
-alert("Wrong Code ❌");
+
+alert("Wrong Owner Code ❌");
+
 
 }
 
+
 }
+
+
+
+
 
 
 
@@ -102,13 +123,17 @@ alert("Wrong Code ❌");
 
 // ================= SIGNUP =================
 
+
 function signup(){
+
 
 let username =
 document.getElementById("newUsername").value;
 
+
 let password =
 document.getElementById("newPassword").value;
+
 
 
 if(!username || !password){
@@ -120,18 +145,26 @@ return;
 }
 
 
+
 localStorage.setItem(
 "sibghatUser",
 JSON.stringify({
+
 username,
+
 password
+
 })
+
 );
 
 
-alert("Signup Successful ✅");
+
+alert("Account Created ✅");
+
 
 showLogin();
+
 
 }
 
@@ -139,9 +172,15 @@ showLogin();
 
 
 
+
+
+
+
 // ================= LOGIN =================
 
+
 function login(){
+
 
 let username =
 document.getElementById("username").value;
@@ -151,6 +190,7 @@ let password =
 document.getElementById("password").value;
 
 
+
 let user =
 JSON.parse(localStorage.getItem("sibghatUser"));
 
@@ -158,7 +198,7 @@ JSON.parse(localStorage.getItem("sibghatUser"));
 
 if(!user){
 
-alert("Please signup first");
+alert("Create account first");
 
 return;
 
@@ -166,26 +206,42 @@ return;
 
 
 
-if(username===user.username &&
-password===user.password){
+
+if(
+username===user.username &&
+password===user.password
+
+){
+
 
 alert("Login Successful ✅");
 
 openAI();
 
+
+
 }else{
+
 
 alert("Wrong Login ❌");
 
-}
 
 }
+
+
+
+}
+
+
+
+
 
 
 
 
 
 // ================= PAGE SWITCH =================
+
 
 function showSignup(){
 
@@ -194,6 +250,7 @@ document.getElementById("login-section").style.display="none";
 document.getElementById("signup-section").style.display="block";
 
 }
+
 
 
 
@@ -209,13 +266,22 @@ document.getElementById("login-section").style.display="block";
 
 
 
+
+
+
+
 // ================= PROMPT =================
+
 
 function setPrompt(text){
 
 document.getElementById("prompt").value=text;
 
 }
+
+
+
+
 
 
 
@@ -241,35 +307,53 @@ document.body.classList.toggle("light");
 if(document.body.classList.contains("light")){
 
 
-localStorage.setItem(
-"theme",
-"light"
-);
-
-
-themeBtn.innerHTML="☀️ Light";
-
+localStorage.setItem("theme","light");
 
 
 }else{
 
 
-localStorage.setItem(
-"theme",
-"dark"
-);
-
-
-themeBtn.innerHTML="🌙 Dark";
+localStorage.setItem("theme","dark");
 
 
 }
+
+
+
+updateThemeButton();
+
 
 
 };
 
 
+
 }
+
+
+
+
+function updateThemeButton(){
+
+
+let btn=document.getElementById("themeBtn");
+
+
+if(!btn)return;
+
+
+
+btn.innerHTML =
+document.body.classList.contains("light")
+?
+"☀️ Light"
+:
+"🌙 Dark";
+
+}
+
+
+
 
 
 
@@ -278,14 +362,19 @@ themeBtn.innerHTML="🌙 Dark";
 
 // ================= LOADING =================
 
+
 function startLoading(){
 
-let text=document.getElementById("loadingText");
 
-let loading=document.getElementById("loading");
+document
+.getElementById("loading")
+.classList.remove("hidden");
 
 
-loading.classList.remove("hidden");
+
+let text =
+document.getElementById("loadingText");
+
 
 
 let steps=[
@@ -301,14 +390,19 @@ let steps=[
 ];
 
 
+
 let i=0;
 
 
-window.loadingInterval=setInterval(()=>{
+
+window.loadTimer=setInterval(()=>{
+
 
 text.innerHTML=steps[i];
 
+
 i++;
+
 
 if(i>=steps.length){
 
@@ -316,19 +410,28 @@ i=0;
 
 }
 
+
+
 },1000);
 
 
+
 }
+
+
 
 
 
 function stopLoading(){
 
-clearInterval(window.loadingInterval);
 
-document.getElementById("loading")
+clearInterval(window.loadTimer);
+
+
+document
+.getElementById("loading")
 .classList.add("hidden");
+
 
 }
 
@@ -336,7 +439,11 @@ document.getElementById("loading")
 
 
 
-// ================= GENERATE IMAGE =================
+
+
+
+
+// ================= GENERATE =================
 
 
 const generateBtn =
@@ -347,7 +454,9 @@ document.getElementById("generateBtn");
 if(generateBtn){
 
 
-generateBtn.onclick=async function(){
+
+generateBtn.onclick=async()=>{
+
 
 
 let prompt =
@@ -357,7 +466,7 @@ document.getElementById("prompt").value.trim();
 
 if(!prompt){
 
-alert("Enter prompt first");
+alert("Enter prompt");
 
 return;
 
@@ -365,34 +474,91 @@ return;
 
 
 
-let img =
-document.getElementById("resultImage");
+
+let credits =
+Number(localStorage.getItem("credits") || 100);
 
 
-let download =
-document.getElementById("downloadBtn");
+
+if(credits<=0){
+
+alert("No credits left");
+
+return;
+
+}
+
+
+
+
+
+
+let style =
+document.getElementById("style").value;
+
+
+let model =
+document.getElementById("model").value;
+
+
+let size =
+document.getElementById("size").value;
+
+
+let quality =
+document.getElementById("quality").value;
+
+
+let negative =
+document.getElementById("negativePrompt").value;
+
+
+
+
+
+
+prompt +=
+`
+
+Style: ${style}
+
+Quality: ${quality}
+
+Resolution: ${size}
+
+${negative}
+
+Ultra realistic, detailed, professional photography
+
+`;
+
+
+
+
+
+
+generateBtn.disabled=true;
 
 
 
 startLoading();
 
 
-img.style.display="none";
-
-download.classList.add("hidden");
-
-
 
 try{
 
 
-const response = await fetch(
+
+let response =
+await fetch(
 
 WORKER_URL,
 
 {
 
+
 method:"POST",
+
 
 headers:{
 
@@ -400,11 +566,19 @@ headers:{
 
 },
 
+
 body:JSON.stringify({
 
-prompt
+prompt,
+
+model,
+
+size,
+
+quality
 
 })
+
 
 }
 
@@ -412,12 +586,13 @@ prompt
 
 
 
-const data =
+
+
+
+let data =
 await response.json();
 
 
-
-console.log(data);
 
 
 
@@ -428,13 +603,21 @@ data.url;
 
 
 
+
+
+
 if(!imageURL){
 
-throw new Error(
-"Image not received from Worker"
-);
+throw Error("No image received");
 
 }
+
+
+
+
+
+let img =
+document.getElementById("resultImage");
 
 
 
@@ -448,51 +631,60 @@ img.onload=()=>{
 stopLoading();
 
 
-img.style.display="block";
+generateBtn.disabled=false;
+
+
+img.classList.remove("hidden");
 
 
 
-download.href=imageURL;
-
-download.download=
-"SIBGHAT-AI-"+Date.now()+".png";
-
-
-download.classList.remove("hidden");
+document
+.getElementById("downloadBtn")
+.href=imageURL;
 
 
 
-document.getElementById("favoriteBtn")
+document
+.getElementById("downloadBtn")
 .classList.remove("hidden");
 
 
 
-document.getElementById("shareBtn")
+document
+.getElementById("favoriteBtn")
+.classList.remove("hidden");
+
+
+
+document
+.getElementById("shareBtn")
 .classList.remove("hidden");
 
 
 
 saveHistory(imageURL);
 
+saveGallery(imageURL);
+
 increaseCounter();
+
+useCredit();
 
 
 };
 
 
 
-}
-
-
-catch(error){
+}catch(e){
 
 
 stopLoading();
 
 
-alert(
-"AI Error: "+error.message
-);
+generateBtn.disabled=false;
+
+
+alert("AI Error: "+e.message);
 
 
 }
@@ -502,7 +694,60 @@ alert(
 };
 
 
+
 }
+
+
+
+
+
+
+
+
+
+// ================= CREDITS =================
+
+
+function useCredit(){
+
+
+let c =
+Number(localStorage.getItem("credits") || 100);
+
+
+c--;
+
+
+localStorage.setItem("credits",c);
+
+
+loadCredits();
+
+
+}
+
+
+
+
+function loadCredits(){
+
+
+let box =
+document.getElementById("credits");
+
+
+if(box){
+
+box.innerHTML =
+localStorage.getItem("credits") || 100;
+
+}
+
+
+}
+
+
+
 
 
 
@@ -514,35 +759,42 @@ alert(
 
 function saveHistory(url){
 
-let history =
-JSON.parse(
-localStorage.getItem("sibghatHistory")
-)||[];
+
+let arr =
+JSON.parse(localStorage.getItem("sibghatHistory"))
+||[];
 
 
-history.unshift(url);
+
+arr.unshift(url);
 
 
-history=history.slice(0,10);
+
+arr=arr.slice(0,10);
+
 
 
 localStorage.setItem(
 "sibghatHistory",
-JSON.stringify(history)
+JSON.stringify(arr)
 );
 
 
+
 loadHistory();
+
 
 }
 
 
 
 
+
 function loadHistory(){
 
-let box=document.getElementById("history");
 
+let box =
+document.getElementById("history");
 
 if(!box)return;
 
@@ -550,23 +802,21 @@ if(!box)return;
 box.innerHTML="";
 
 
-let history =
-JSON.parse(
-localStorage.getItem("sibghatHistory")
-)||[];
+let arr =
+JSON.parse(localStorage.getItem("sibghatHistory"))
+||[];
 
 
-history.forEach(img=>{
 
 
-box.innerHTML+=`
+arr.forEach(url=>{
 
+
+box.innerHTML +=
+`
 <div class="history-card">
-
-<img src="${img}">
-
+<img src="${url}">
 </div>
-
 `;
 
 
@@ -574,6 +824,9 @@ box.innerHTML+=`
 
 
 }
+
+
+
 
 
 
@@ -583,23 +836,29 @@ box.innerHTML+=`
 // ================= FAVORITES =================
 
 
-const favoriteBtn=document.getElementById("favoriteBtn");
+const favoriteBtn =
+document.getElementById("favoriteBtn");
+
 
 
 if(favoriteBtn){
 
+
 favoriteBtn.onclick=()=>{
 
 
-let img=document.getElementById("resultImage").src;
+let url =
+document.getElementById("resultImage").src;
 
 
-let fav=
+let fav =
 JSON.parse(localStorage.getItem("favorites"))
 ||[];
 
 
-fav.unshift(img);
+
+fav.unshift(url);
+
 
 
 localStorage.setItem(
@@ -608,13 +867,15 @@ JSON.stringify(fav)
 );
 
 
+
 loadFavorites();
 
 
-alert("Added to Favorites ❤️");
+alert("Added ❤️");
 
 
 };
+
 
 }
 
@@ -622,33 +883,38 @@ alert("Added to Favorites ❤️");
 
 
 
+
+
 function loadFavorites(){
 
-let box=document.getElementById("favorites");
+
+let box =
+document.getElementById("favorites");
 
 
 if(!box)return;
 
 
+
 box.innerHTML="";
 
 
-let fav=
+
+let fav =
 JSON.parse(localStorage.getItem("favorites"))
 ||[];
 
 
-fav.forEach(img=>{
 
 
-box.innerHTML+=`
+fav.forEach(url=>{
 
+
+box.innerHTML+=
+`
 <div class="favorite-card">
-
-<img src="${img}">
-
+<img src="${url}">
 </div>
-
 `;
 
 
@@ -662,21 +928,108 @@ box.innerHTML+=`
 
 
 
+
+
+
+// ================= GALLERY =================
+
+
+function saveGallery(url){
+
+
+let g =
+JSON.parse(localStorage.getItem("gallery"))
+||[];
+
+
+
+g.unshift(url);
+
+
+
+g=g.slice(0,20);
+
+
+
+localStorage.setItem(
+"gallery",
+JSON.stringify(g)
+);
+
+
+
+loadGallery();
+
+
+}
+
+
+
+
+
+function loadGallery(){
+
+
+let box =
+document.getElementById("galleryBox");
+
+
+if(!box)return;
+
+
+box.innerHTML="";
+
+
+
+let g =
+JSON.parse(localStorage.getItem("gallery"))
+||[];
+
+
+
+
+g.forEach(url=>{
+
+
+box.innerHTML+=
+`
+<img src="${url}">
+`;
+
+
+});
+
+
+}
+
+
+
+
+
+
+
+
+
 // ================= SHARE =================
 
 
-const shareBtn=document.getElementById("shareBtn");
+const shareBtn =
+document.getElementById("shareBtn");
 
 
 if(shareBtn){
 
+
 shareBtn.onclick=()=>{
 
 
-let url=document.getElementById("resultImage").src;
+let url =
+document.getElementById("resultImage").src;
+
 
 
 if(navigator.share){
+
 
 navigator.share({
 
@@ -686,9 +1039,12 @@ url:url
 
 });
 
+
 }else{
 
-alert("Share not supported");
+
+alert("Sharing not supported");
+
 
 }
 
@@ -697,6 +1053,9 @@ alert("Share not supported");
 
 
 }
+
+
+
 
 
 
@@ -708,65 +1067,76 @@ alert("Share not supported");
 
 function increaseCounter(){
 
-let count=
-Number(localStorage.getItem("generatedCount"))
-||0;
+
+let c =
+Number(localStorage.getItem("generatedCount")||0);
 
 
-count++;
+c++;
 
 
 localStorage.setItem(
 "generatedCount",
-count
+c
 );
+
 
 
 loadCounter();
 
+
 }
+
 
 
 
 function loadCounter(){
 
-let counter=document.getElementById("counter");
+
+let c =
+document.getElementById("counter");
 
 
-if(counter){
+if(c){
 
-counter.innerText=
-localStorage.getItem("generatedCount")
-||0;
+
+c.innerHTML =
+localStorage.getItem("generatedCount")||0;
+
 
 }
 
+
 }
 
 
 
 
 
-// ================= CLEAR HISTORY =================
 
 
-const clearHistoryBtn =
+
+
+// ================= CLEAR =================
+
+
+let clearBtn =
 document.getElementById("clearHistoryBtn");
 
 
-if(clearHistoryBtn){
-
-clearHistoryBtn.onclick=()=>{
+if(clearBtn){
 
 
-localStorage.removeItem(
-"sibghatHistory"
-);
+clearBtn.onclick=()=>{
+
+
+localStorage.removeItem("sibghatHistory");
 
 
 document.getElementById("history").innerHTML="";
 
 
 };
+
 
 }
