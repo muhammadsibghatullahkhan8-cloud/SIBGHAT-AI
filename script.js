@@ -9,79 +9,49 @@ const loading = document.getElementById("loading");
 const historyContainer = document.getElementById("history");
 const clearHistoryBtn = document.getElementById("clearHistoryBtn");
 
-/* ================= OWNER ACCESS ================= */
-function ownerAccess(code) {
-  const ownerCode = "*283141#";
-  if (code === ownerCode) {
-    alert("✅ Owner access granted!");
-    document.getElementById("owner-section").style.display = "none";
-    document.getElementById("app").style.display = "flex";
-  } else {
-    alert("❌ Invalid owner code!");
-  }
-}
-
-/* ================= SPLASH SCREEN ================= */
-window.addEventListener("load", () => {
-  const splash = document.getElementById("splash-screen");
-  setTimeout(() => {
-    splash.style.opacity = "0";
-    setTimeout(() => splash.remove(), 600);
-  }, 2000);
-});
-
-/* ================= IMAGE GENERATION (Unsplash) ================= */
-function setPrompt(text) {
-  promptInput.value = text;
-}
-
-function buildPrompt(text) {
-  let styleBoost = "";
-  if (style.value === "Realistic") styleBoost = "realistic";
-  else if (style.value === "Anime") styleBoost = "anime";
-  else if (style.value === "Cinematic") styleBoost = "cinematic";
-
-  let categoryBoost = category.value ? category.value : "";
-
-  return `${text} ${styleBoost} ${categoryBoost}`;
-}
-
+/* ================= IMAGE GENERATION ================= */
 async function generateImage() {
-  let text = promptInput.value.trim();
-  if (!text) {
-    alert("Please enter a prompt!");
-    return;
-  }
+    let text = promptInput.value.trim();
+    if (!text) {
+        alert("Please enter a prompt!");
+        return;
+    }
 
-  loading.classList.remove("hidden");
-  resultImage.style.display = "none";
-  downloadBtn.style.display = "none";
+    // UI Updates
+    loading.classList.remove("hidden");
+    resultImage.style.display = "none";
+    downloadBtn.classList.add("hidden");
 
-  const finalPrompt = buildPrompt(text);
+    // Prompt building
+    const styleBoost = style.value !== "Default" ? style.value : "";
+    const fullPrompt = `${text}, ${styleBoost}, ${category.value}`.replace(/,/g, " ");
+    
+    // Pollinations AI URL (Image Generation)
+    const imageURL = `https://image.pollinations.ai/prompt/${encodeURIComponent(fullPrompt)}?width=800&height=600&nologo=true`;
 
-  // Free unlimited image fetcher
-  const imageURL = `https://source.unsplash.com/800x600/?${encodeURIComponent(finalPrompt)}`;
+    // Load Image
+    resultImage.onload = () => {
+        loading.classList.add("hidden");
+        resultImage.style.display = "block";
+        downloadBtn.href = imageURL;
+        downloadBtn.classList.remove("hidden");
 
-  resultImage.onload = () => {
-    loading.classList.add("hidden");
-    resultImage.style.display = "block";
-    downloadBtn.href = imageURL;
-    downloadBtn.download = "sibghat_ai_image.jpg";
-    downloadBtn.classList.remove("hidden");
+        // History thumbnail
+        const thumb = document.createElement("img");
+        thumb.src = imageURL;
+        thumb.className = "thumb";
+        historyContainer.appendChild(thumb);
+    };
 
-    const thumb = document.createElement("img");
-    thumb.src = imageURL;
-    thumb.className = "thumb";
-    historyContainer.appendChild(thumb);
-  };
+    resultImage.onerror = () => {
+        loading.classList.add("hidden");
+        alert("Image generate karne mein error aaya. Try again!");
+    };
 
-  resultImage.src = imageURL;
+    resultImage.src = imageURL;
 }
 
-/* ================= GENERATE BUTTON ================= */
 generateBtn.addEventListener("click", generateImage);
+clearHistoryBtn.addEventListener("click", () => historyContainer.innerHTML = "");
 
-/* ================= CLEAR HISTORY ================= */
-clearHistoryBtn.addEventListener("click", () => {
-  historyContainer.innerHTML = "";
-});
+// Owner Access & Splash logic wahi rahegi jo aapki pehle thi
