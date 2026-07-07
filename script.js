@@ -1,55 +1,29 @@
-// ================= ELEMENTS =================
-
-const app = document.getElementById("app");
+// ================= SIBGHAT AI SCRIPT =================
 
 
-// ================= SPLASH SCREEN =================
+// Splash Screen
 
-window.addEventListener("load", () => {
+window.addEventListener("load", function(){
 
     const splash = document.getElementById("splash-screen");
 
-    if (splash) {
+    if(splash){
 
-        setTimeout(() => {
+        setTimeout(function(){
 
-            splash.style.opacity = "0";
+            splash.style.display = "none";
 
-            setTimeout(() => {
-                splash.style.display = "none";
-            }, 600);
-
-        }, 2000);
+        },2000);
 
     }
 
 });
 
 
-// ================= OWNER ACCESS =================
 
-function ownerAccess(code) {
+// Open AI App
 
-    const ownerCode = "*283141#";
-
-    if (code === ownerCode) {
-
-        alert("✅ Owner Access Granted");
-
-        openAI();
-
-    } else {
-
-        alert("❌ Wrong Owner Code");
-
-    }
-
-}
-
-
-// ================= OPEN AI =================
-
-function openAI() {
+function openAI(){
 
     document.getElementById("login-section").style.display = "none";
 
@@ -63,20 +37,39 @@ function openAI() {
 
 
 
-// ================= SIGNUP =================
+// Owner Access
 
-function signup() {
+function ownerAccess(code){
 
-    let username =
-    document.getElementById("newUsername").value;
+    if(code === "*283141#"){
 
-    let password =
-    document.getElementById("newPassword").value;
+        alert("Owner Access Granted ✅");
+
+        openAI();
+
+    }else{
+
+        alert("Wrong Owner Code ❌");
+
+    }
+
+}
+
+
+
+// Signup
+
+function signup(){
+
+    let username = document.getElementById("newUsername").value;
+
+    let password = document.getElementById("newPassword").value;
 
 
     if(username === "" || password === ""){
 
-        alert("Please fill all fields");
+        alert("Fill all fields");
+
         return;
 
     }
@@ -85,13 +78,13 @@ function signup() {
     localStorage.setItem(
         "sibghatUser",
         JSON.stringify({
-            username,
-            password
+            username: username,
+            password: password
         })
     );
 
 
-    alert("✅ Signup Successful");
+    alert("Account Created ✅");
 
     showLogin();
 
@@ -99,44 +92,38 @@ function signup() {
 
 
 
-// ================= LOGIN =================
+// Login
 
 function login(){
 
-    let username =
-    document.getElementById("username").value;
+    let username = document.getElementById("username").value;
+
+    let password = document.getElementById("password").value;
 
 
-    let password =
-    document.getElementById("password").value;
-
-
-    let user =
-    JSON.parse(localStorage.getItem("sibghatUser"));
-
+    let user = JSON.parse(
+        localStorage.getItem("sibghatUser")
+    );
 
 
     if(!user){
 
-        alert("Please signup first");
+        alert("Please Signup First");
+
         return;
 
     }
 
 
+    if(username === user.username && password === user.password){
 
-    if(username === user.username &&
-       password === user.password){
-
-
-        alert("✅ Login Successful");
+        alert("Login Successful ✅");
 
         openAI();
 
-
     }else{
 
-        alert("❌ Wrong Username or Password");
+        alert("Wrong Username or Password ❌");
 
     }
 
@@ -144,7 +131,7 @@ function login(){
 
 
 
-// ================= PAGE SWITCH =================
+// Show Signup
 
 function showSignup(){
 
@@ -156,6 +143,8 @@ function showSignup(){
 
 
 
+// Show Login
+
 function showLogin(){
 
     document.getElementById("signup-section").style.display="none";
@@ -165,7 +154,8 @@ function showLogin(){
 }
 
 
-// ================= PROMPT BUTTON =================
+
+// Prompt Buttons
 
 function setPrompt(text){
 
@@ -175,34 +165,34 @@ function setPrompt(text){
 
 
 
-// ================= IMAGE GENERATION PLACEHOLDER =================
+// Clear History
 
-const generateBtn = document.getElementById("generateBtn");
+const clearBtn = document.getElementById("clearHistoryBtn");
 
-if(generateBtn){
 
-generateBtn.addEventListener("click",()=>{
+if(clearBtn){
 
-    alert("AI Generator is connected next step");
+    clearBtn.onclick = function(){
 
-});
+        document.getElementById("history").innerHTML="";
+
+    };
 
 }
 
 
 
-// ================= HISTORY =================
+// Test Generate Button
 
-const clearHistoryBtn =
-document.getElementById("clearHistoryBtn");
+const generateBtn = document.getElementById("generateBtn");
 
 
-if(clearHistoryBtn){
+if(generateBtn){
 
-clearHistoryBtn.addEventListener("click",()=>{
+    generateBtn.onclick = function(){
 
-document.getElementById("history").innerHTML="";
+        alert("SIBGHAT AI Generator Ready 🚀");
 
-});
+    };
 
 }
