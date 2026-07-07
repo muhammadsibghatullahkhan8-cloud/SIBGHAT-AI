@@ -46,12 +46,9 @@ Turning imagination into reality ✨
 
 <h2>🔐 Login</h2>
 
-
 <input id="username" placeholder="Username">
 
-
 <input id="password" type="password" placeholder="Password">
-
 
 <button onclick="login()">
 Login
@@ -70,7 +67,9 @@ Don't have account?
 
 
 
+
 <!-- SIGNUP -->
+
 
 <section id="signup-section" style="display:none;">
 
@@ -107,7 +106,6 @@ Already have account?
 
 <section id="owner-section">
 
-
 <h2>
 👑 Owner Access
 </h2>
@@ -130,18 +128,14 @@ Access
 
 
 
-<!-- APP -->
 
+<!-- APP -->
 
 <div id="app" style="display:none;">
 
 
 
-
-
-
 <!-- SIDEBAR -->
-
 
 <aside id="sidebar">
 
@@ -161,18 +155,13 @@ Clear
 </button>
 
 
-
 <h3>
 🔥 Generated:
-<span id="counter">
-0
-</span>
+<span id="counter">0</span>
 </h3>
 
 
-
 <div id="history"></div>
-
 
 
 
@@ -202,7 +191,6 @@ Clear
 Free Credits
 
 </div>
-
 
 
 </aside>
@@ -247,10 +235,30 @@ Create stunning AI images from your imagination.
 
 
 
+
 <textarea 
 id="prompt"
-placeholder="Describe your imagination..."
+placeholder="Describe your image or use voice..."
 ></textarea>
+
+
+
+
+
+
+
+<!-- VOICE BUTTON -->
+
+<button id="voiceBtn">
+
+🎤 Speak Prompt
+
+</button>
+
+
+
+<p id="voiceStatus"></p>
+
 
 
 
@@ -310,16 +318,13 @@ placeholder="Negative prompt (example: blurry, low quality, distorted face)"
 
 <select id="model">
 
-
 <option value="flux">
 FLUX AI
 </option>
 
-
 <option value="sdxl">
 Stable Diffusion XL
 </option>
-
 
 <option value="anime">
 Anime AI
@@ -401,6 +406,8 @@ City
 
 
 
+
+
 <select id="size">
 
 
@@ -425,6 +432,7 @@ City
 
 
 </select>
+
 
 
 
@@ -463,13 +471,11 @@ Ultra
 
 
 
-
 <button id="generateBtn">
 
 ✨ Generate AI Image
 
 </button>
-
 
 
 
@@ -497,12 +503,12 @@ Ultra
 
 
 
-
 <div id="imageContainer">
 
 
 
 <img id="resultImage">
+
 
 
 
@@ -526,7 +532,9 @@ Ultra
 </button>
 
 
+
 </div>
+
 
 
 
@@ -540,8 +548,8 @@ Download Image
 
 
 
-</div>
 
+</div>
 
 
 
@@ -571,11 +579,11 @@ Download Image
 
 
 
-
 </main>
 
 
 </div>
+
 
 
 
